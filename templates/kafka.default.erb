@@ -1,0 +1,18 @@
+# Note: This file is managed by Puppet.
+
+# whether to allow init.d script to start a kafka broker ("yes", "no")
+KAFKA_START=<%= @enabled ? 'yes' : 'no' %>
+
+# The default JMX_PORT for Kafka Brokers is 9999.
+# Set JMX_PORT to something else to override this.
+JMX_PORT=<%= @jmx_port %>
+
+# JMX options
+KAFKA_JMX_OPTS=${KAFKA_JMX_OPTS:="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"}
+
+# Memory sizes, and logging configuration
+KAFKA_OPTS=${KAFKA_OPTS:="-Xmx512M -server -Dlog4j.configuration=file:/etc/kafka/log4j.properties"}
+
+# User and group to run as
+KAFKA_USER=kafka
+KAFKA_GROUP=kafka

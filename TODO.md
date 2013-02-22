@@ -1,0 +1,2 @@
+- Better puppetization for producer.properties
+- Puppetization of per topic partition settings.
