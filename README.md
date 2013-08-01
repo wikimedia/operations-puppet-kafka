@@ -6,7 +6,7 @@ This module is maintained at https://github.com/wikimedia/puppet-kafka.
 This module is currently being maintained by The Wikimedia Foundation at
 [operations/puppet/kafka](https://gerrit.wikimedia.org/r/gitweb?p=operations%2Fpuppet%2Fkafka.git;a=summary)
 and mirrored on [GitHub](https://github.com/wikimedia/operations-puppet-kafka).
-It was originally developed for 0.7.2 at https://github.com/wikimedia/puppet-kafka.
+It was originally developed for 0.7.2 at https://github.com/wikimedia/puppet-kafka-0.7.2.
 
 
 ## Requirements:
