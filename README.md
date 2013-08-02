@@ -9,7 +9,6 @@
 # Kafka Puppet Module
 
 A Puppet module for installing and managing [Apache Kafka](http://kafka.apache.org/) brokers.
-This module is maintained at https://github.com/wikimedia/puppet-kafka.
 
 This module is currently being maintained by The Wikimedia Foundation at
 [operations/puppet/kafka](https://gerrit.wikimedia.org/r/gitweb?p=operations%2Fpuppet%2Fkafka.git;a=summary)
@@ -22,6 +21,8 @@ It was originally developed for 0.7.2 at https://github.com/wikimedia/puppet-kaf
 - An Kafka 0.8 package.
   0.8 is not yet released (as of 2013-06-13), but you can build a .deb package using
   [operations/debs/kafka debian branch](https://github.com/wikimedia/operations-debs-kafka/tree/debian)
+- A running zookeeper cluster.  You can set one up using WMF's
+  [puppet-zookeeper module](https://github.com/wikimedia/puppet-zookeeper).
 
 # Usage
 
