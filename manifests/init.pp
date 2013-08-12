@@ -16,6 +16,12 @@
 # $zookeeper_connection_timeout_ms  - Timeout in ms for connecting to zookeeper.
 #                                     Default: 1000000
 #
+# $zookeeper_chroot                 - Path in zookeeper in which to keep Kafka data.
+#                                     Default: /, the root path.  This module will
+#                                     Not create this znode for you, you must do so
+#                                     manually yourself.  See the README for instructions
+#                                     on how to do so.
+#
 # $kafka_log_file                   - File in which to store Kafka logs
 #                                     (not event data).  Default: /var/log/kafka/kafka.log
 #
@@ -38,6 +44,7 @@ class kafka(
 
     $zookeeper_hosts                 = $kafka::defaults::zookeeper_hosts,
     $zookeeper_connection_timeout_ms = $kafka::defaults::zookeeper_connection_timeout_ms,
+    $zookeeper_chroot                = $kafka::defaults::zookeeper_chroot,
 
     $kafka_log_file                  = $kafka::defaults::kafka_log_file,
     $producer_type                   = $kafka::defaults::producer_type,

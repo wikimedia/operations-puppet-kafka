@@ -87,6 +87,7 @@ class kafka::server(
     # define local variables from kafka class for use in ERb template.
     $zookeeper_hosts                 = $kafka::zookeeper_hosts
     $zookeeper_connection_timeout_ms = $kafka::zookeeper_connection_timeout_ms
+    $zookeeper_chroot                = $kafka::zookeeper_chroot
 
     # Get this broker's id and port out of the $kafka::hosts configuration hash
     $broker_id   = $kafka::hosts[$::fqdn]['id']
