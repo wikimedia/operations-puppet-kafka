@@ -25,7 +25,7 @@ class kafka::defaults {
     $consumer_group_id               = 'test-consumer-group'
 
     $jmx_port                        = 9999
-    $log_dir                         = '/var/spool/kafka'
+    $log_dir                         = ['/var/spool/kafka']
     $num_partitions                  = 1
 
     $num_network_threads             = 2

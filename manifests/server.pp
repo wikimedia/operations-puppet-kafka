@@ -5,7 +5,7 @@
 # $enabled                     - If false, Kafka Broker Server will not be
 #                                started.  Default: true.
 #
-# $log_dir                     - Directory in which the broker will store its
+# $log_dir                     - Array of directories in which the broker will store its
 #                                received log event data.
 #                                (This is log.dir in server.properties).
 #                                Default: /var/spool/kafka

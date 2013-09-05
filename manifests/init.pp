@@ -17,10 +17,10 @@
 #                                     Default: 1000000
 #
 # $zookeeper_chroot                 - Path in zookeeper in which to keep Kafka data.
-#                                     Default: /, the root path.  This module will
-#                                     Not create this znode for you, you must do so
-#                                     manually yourself.  See the README for instructions
-#                                     on how to do so.
+#                                     Default: undef (the root znode).  Note that if you set
+#                                     this paramater, the znode will not be created for you.
+#                                     You must do so manually yourself.  See the README
+#                                     for instructions on how to do so.
 #
 # $kafka_log_file                   - File in which to store Kafka logs
 #                                     (not event data).  Default: /var/log/kafka/kafka.log

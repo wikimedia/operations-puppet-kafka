@@ -39,7 +39,7 @@ socket.request.max.bytes=<%= @socket_request_max_bytes %>
 ############################# Log Basics #############################
 
 # The directory under which to store log files
-log.dir=<%= @log_dir %>
+log.dir=<%= Array(@log_dir).join(',') %>
 
 # The number of logical partitions per topic per server. More partitions allow greater parallelism
 # for consumption, but also mean more files.
