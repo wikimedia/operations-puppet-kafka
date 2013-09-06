@@ -1,2 +1,2 @@
-- Better puppetization for producer.properties
+- Puppetization of Kafka MirrorMaker service.
 - Puppetization of per topic partition settings.
