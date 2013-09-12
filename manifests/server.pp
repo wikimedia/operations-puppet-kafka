@@ -59,6 +59,7 @@ class kafka::server(
     $log_dir                         = $kafka::defaults::log_dir,
     $jmx_port                        = $kafka::defaults::jmx_port,
     $num_partitions                  = $kafka::defaults::num_partitions,
+    $heap_opts                       = $kafka::defaults::heap_opts,
 
     $num_network_threads             = $kafka::defaults::num_network_threads,
     $num_io_threads                  = $kafka::defaults::num_io_threads,
