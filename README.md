@@ -6,7 +6,7 @@
     - [Kafka (Clients)](#kafka)
     - [Kafka Broker Servers](#kafka-broker-server)
     - [Custom Zookeeper Chroot](#custom-zookeeper-chroot)
-
+    - [Kafka Mirror](#kafka-mirror)
 
 # Kafka Puppet Module
 
@@ -31,47 +31,53 @@ It was originally developed for 0.7.2 at https://github.com/wikimedia/puppet-kaf
 ## Kafka (Clients)
 
 ```puppet
-# Install the kafka package and configure kafka.
-class { 'kafka':
-    hosts => {
-        'kafka-node01.domain.org' => { 'id' => 1, 'port' => 12345 },
-        'kafka-node02.domain.org' => { 'id' => 2 },
-    },
-    zookeeper_hosts => ['zk-node01:2181', 'zk-node02:2181', 'zk-node03:2181'],
-}
+# Install the kafka package.
+class { 'kafka': }
 ```
 
-The ```hosts``` parameter is a Hash keyed by ```$::fqdn```.  Each value is another Hash
-that contains config settings for that kafka host.  ```id``` is required and must
-be unique for each Kafka Broker Server host.  ```port``` is optional, and defaults
-to 9092.
-
-```zookeeper_hosts``` is an array of Zookeeper host:port pairs.
+This will install the Kafka package which includes /usr/sbin/kafka, useful for
+running client (console-consumer, console-producer, etc.) commands.
 
 ## Kafka Broker Server
 
 ```puppet
-# kafka::server requires the main kafka class.
-class { 'kafka':
-    hosts => {
-        'kafka-node01.domain.org' => { 'id' => 1, 'port' => 12345 },
-        'kafka-node02.domain.org' => { 'id' => 2 },
-    },
-    zookeeper_hosts => ['zk-node01:2181', 'zk-node02:2181', 'zk-node03:2181'],
-}
-
 # Include Kafka Broker Server.
-class { 'kafka::server': }
+class { 'kafka::server':
+    log_dirs         => ['/var/spool/kafka/a', '/var/spool/kafka/b'],
+    brokers          => {
+        'kafka-node01.example.com' => { 'id' => 1, 'port' => 12345 },
+        'kafka-node02.example.com' => { 'id' => 2 },
+    },
+    zookeeper_hosts  => ['zk-node01:2181', 'zk-node02:2181', 'zk-node03:2181'],
+    zookeeper_chroot => '/kafka/cluster_name',
+}
 ```
+
+```log_dirs``` defaults to a single ```['/var/spool/kafka]```, but you may
+specify multiple Kafka log data directories here.  This is useful for spreading
+your topic partitions across multiple disks.
+
+The ```brokers``` parameter is a Hash keyed by ```$::fqdn```.  Each value is another Hash
+that contains config settings for that kafka host.  ```id``` is required and must
+be unique for each Kafka Broker Server host.  ```port``` is optional, and defaults
+to 9092.
 
 Each Kafka Broker Server's ```broker_id``` and ```port``` properties in server.properties
 will be set based by looking up the node's ```$::fqdn``` in the hosts 
 Hash passed into the ```kafka``` base class.
 
+```zookeeper_hosts``` is an array of Zookeeper host:port pairs.
+```zookeeper_chroot``` is optional, and allows you to specify a Znode under
+which Kafka will store its metadata in Zookeeper.  This is useful if you
+want to use a single Zookeeper cluster to manage multiple Kafka clusters.
+See below for information on how to create this Znode in Zookeeper.
+
+
+
 ## Custom Zookeeper Chroot
 
 If Kafka will share a Zookeeper cluster with other users, you might want to
-create a znode in zookeeper in which to store your Kafka cluster's data.
+create a Znode in zookeeper in which to store your Kafka cluster's data.
 You can set the ```zookeeper_chroot``` parameter on the ```kafka``` class to do this.
 
 First, you'll need to create the znode manually yourself.  You can use
@@ -96,14 +102,41 @@ You can use whatever chroot znode path you like.  The second argument
 
 Then:
 ```puppet
-class { 'kafka':
-    hosts => {
-        'kafka-node01.domain.org' => { 'id' => 1, 'port' => 12345 },
-        'kafka-node02.domain.org' => { 'id' => 2 },
+class { 'kafka::server':
+    brokers => {
+        'kafka-node01.example.com' => { 'id' => 1, 'port' => 12345 },
+        'kafka-node02.example.com' => { 'id' => 2 },
     },
     zookeeper_hosts => ['zk-node01:2181', 'zk-node02:2181', 'zk-node03:2181'],
     # set zookeeper_chroot on the kafka class.
-    zookeeper_chroot => '/my_kafka',
+    zookeeper_chroot => '/kafka/clusterA',
 }
 ```
 
+## Kafka Mirror
+
+Kafka MirrorMaker is usually used for inter data center Kafka cluster replication
+and aggregation.  You can consume from any number of source Kafka clusters, and
+produce to a single destination Kafka cluster.
+
+```puppet
+# Configure kafka-mirror to produce to Kafka Brokers which are
+# part of our kafka aggregator cluster.
+class { 'kafka::mirror':
+    destination_brokers => {
+        'kafka-aggregator01.example.com' => { 'id' => 11 },
+        'kafka-aggregator02.example.com' => { 'id' => 12 },
+    },
+    topic_whitelist => 'webrequest.*',
+}
+
+# Configure kafka-mirror to consume from both clusterA and clusterB
+kafka::mirror::consumer { 'clusterA':
+    zookeeper_hosts  => ['zk-node01:2181', 'zk-node02:2181', 'zk-node03:2181'],
+    zookeeper_chroot => ['/kafka/clusterA'],
+}
+kafka::mirror::consumer { 'clusterB':
+    zookeeper_hosts  => ['zk-node01:2181', 'zk-node02:2181', 'zk-node03:2181'],
+    zookeeper_chroot => ['/kafka/clusterB'],
+}
+```

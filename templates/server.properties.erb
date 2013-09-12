@@ -39,11 +39,12 @@ socket.request.max.bytes=<%= @socket_request_max_bytes %>
 ############################# Log Basics #############################
 
 # The directory under which to store log files
-log.dir=<%= Array(@log_dir).join(',') %>
+log.dirs=<%= Array(@log_dirs).join(',') %>
 
-# The number of logical partitions per topic per server. More partitions allow greater parallelism
-# for consumption, but also mean more files.
-num.partitions=<%= @num_partitions %>
+# The default number of logical partitions per topic per server. More
+# partitions allow greater parallelism for consumption, but also mean more files.
+# Default to the number of log.dirs.
+num.partitions=<%= Array(@log_dirs).length %>
 
 
 ############################# Log Flush Policy #############################

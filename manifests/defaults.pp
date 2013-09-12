@@ -8,7 +8,7 @@ class kafka::defaults {
     # if a host in the $kafka::hosts array
     # does not have a 'port' key set.
     $default_broker_port = 9092
-    $hosts = {
+    $brokers = {
         "${::fqdn}" => {
             'port' => $default_broker_port,
             'id'   => 1,
@@ -24,9 +24,9 @@ class kafka::defaults {
     $producer_batch_num_messages     = 200
     $consumer_group_id               = 'test-consumer-group'
 
+    # Broker Server settings
     $jmx_port                        = 9999
-    $log_dir                         = ['/var/spool/kafka']
-    $num_partitions                  = 1
+    $log_dirs                        = ['/var/spool/kafka']
     $heap_opts                       = undef
 
     $num_network_threads             = 2
@@ -50,6 +50,13 @@ class kafka::defaults {
     # Kafka package version.
     $version                         = 'installed'
 
+    # MirrorMaker settings
+    $topic_whitelist                 = '.*'
+    $topic_blacklist                 = undef
+    $num_streams                     = 1
+    $num_producers                   = 1
+    $queue_size                      = 10000
+
     # Default puppet paths to template config files.
     # This allows us to use custom template config files
     # if we want to override more settings than this
@@ -58,6 +65,6 @@ class kafka::defaults {
     $consumer_properties_template    = 'kafka/consumer.properties.erb'
     $log4j_properties_template       = 'kafka/log4j.properties.erb'
     $server_properties_template      = 'kafka/server.properties.erb'
-    $default_template                = 'kafka/kafka.default.erb'
+    $server_default_template         = 'kafka/kafka.default.erb'
+    $mirror_default_template         = 'kafka/kafka-mirror.default.erb'
 }
-

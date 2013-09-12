@@ -12,7 +12,7 @@
 # to get a list of ['hostname1:port1', 'hostname2:port2', ...]
 # for the broker.list setting.
 broker_list=[]
-@hosts.sort.each do |broker_config|
+@brokers.sort.each do |broker_config|
     hostname = broker_config[0]
     port     = broker_config[1].fetch('port', 9092).to_s
     broker_list += ["#{hostname}:#{port}"]
