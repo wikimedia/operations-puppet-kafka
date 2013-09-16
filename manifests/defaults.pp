@@ -45,7 +45,7 @@ class kafka::defaults {
     $log_cleanup_policy              = 'delete'
     $log_cleanup_interval_mins       = 1
 
-    $metrics_dir                     = undef
+    $metrics_properties              = undef
 
     # Kafka package version.
     $version                         = 'installed'

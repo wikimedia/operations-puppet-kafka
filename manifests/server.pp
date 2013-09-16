@@ -52,7 +52,9 @@
 # $log_cleanup_policy          - The default policy for handling log tails.
 #                                Can be either delete or dedupe.  Default: delete
 #
-# $metrics_dir                 - Directory in which to store metrics CSVs.  Default: undef (metrics disabled)
+# $metrics_properties          - Config hash of Kafka metrics property key => value pairs.
+#                                Use this for configuring your own metrics reporter classes.
+#                                Default: undef
 #
 class kafka::server(
     $enabled                         = true,
@@ -76,7 +78,7 @@ class kafka::server(
     $log_cleanup_interval_mins       = $kafka::defaults::log_cleanup_interval_mins,
     $log_cleanup_policy              = $kafka::defaults::log_cleanup_policy,
 
-    $metrics_dir                     = $kafka::defaults::metrics_dir,
+    $metrics_properties              = $kafka::defaults::metrics_properties,
 
     $server_properties_template      = $kafka::defaults::server_properties_template,
     $default_template                = $kafka::defaults::default_template
@@ -115,17 +117,6 @@ class kafka::server(
         owner   => 'kafka',
         group   => 'kafka',
         mode    => '0755',
-    }
-
-    # If we are using Kafka Metrics Reporter, ensure
-    # that the $metrics_dir exists.
-    if ($metrics_dir and !defined(File[$metrics_dir])) {
-        file { $metrics_dir:
-            ensure  => 'directory',
-            owner   => 'kafka',
-            group   => 'kafka',
-            mode    => '0755',
-        }
     }
 
     # Start the Kafka server.

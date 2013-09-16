@@ -103,12 +103,12 @@ zookeeper.connect=<%= @zookeeper_hosts.sort.join(',') %><%= @zookeeper_chroot if
 # Timeout in ms for connecting to zookeeper
 zookeeper.connection.timeout.ms=<%= @zookeeper_connection_timeout_ms %>
 
-<% if @metrics_dir -%>
+<% if @metrics_properties -%>
 ############################# Kafka Metrics Reporter ############################
 
-kafka.csv.metrics.reporter.enabled=true
-kafka.csv.metrics.dir=<%= @metrics_dir %>
 kafka.metrics.polling.interval.secs=5
-kafka.metrics.reporters=kafka.metrics.KafkaCSVMetricsReporter
-
+<% @metrics_properties.keys.sort.each do |key| -%>
+<%= key %>=<%= @metrics_properties[key] %>
 <% end -%>
+
+<% end # if @metrics_properties -%>
