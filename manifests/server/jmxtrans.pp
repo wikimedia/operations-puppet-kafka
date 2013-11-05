@@ -97,7 +97,7 @@ class kafka::server::jmxtrans(
             },
             {
                   'name'        => '\"kafka.server\":type=\"ReplicaManager\",name=\"IsrExpandsPerSec\"',
-                  'resultAlias' => 'kafka.server.ReplicaManager.IsrExpands',
+                  'resultAlias' => 'kafka.server.ReplicaManager.ISRExpands',
                   'attrs'       => {
                       'Count'             => { 'slope' => 'positive', 'units' => 'expands'        },
                       'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'expands/second' },
