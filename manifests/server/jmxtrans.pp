@@ -1,6 +1,7 @@
 # == Class kafka::server::jmxtrans
-# Sets up a jmxtrans instance for a Kafka Server Broker.
-# this requires the jmxtrans puppet module found at
+# Sets up a jmxtrans instance for a Kafka Server Broker
+# running on the current host.
+# Note: This requires the jmxtrans puppet module found at
 # https://github.com/wikimedia/puppet-jmxtrans.
 #
 # == Parameters
@@ -13,7 +14,7 @@
 #                  class provides.
 #
 # == Usage
-# class { 'kafka::server::jmxtrans': 
+# class { 'kafka::server::jmxtrans':
 #     ganglia => 'ganglia.example.org:8649'
 # }
 #
@@ -36,104 +37,144 @@ class kafka::server::jmxtrans(
 
 
     $kafka_objects = $objects ? {
+        # if $objects was not set, then use this as the
+        # default set of Kafka JMX MBean objects to query.
         undef   => [
             {
                 'name'          => '\"kafka.log\":type=\"LogFlushStats\",name=\"LogFlushRateAndTimeMs\"',
-                "resultAlias"   => 'kafka.log.LogFlushStats.LogFlushRateAndTimeMs',
+                'resultAlias'   => 'kafka.log.LogFlushStats.LogFlush',
                 'attrs'         => {
-                    'Count' => { 'units' => 'flushes',   'slope' => 'both' },
+                    'Count'             => { 'slope' => 'positive', 'units' => 'calls/second' },
+                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'calls/second' },
+                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'calls/second' },
+                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'calls/second' },
+                    'MeanRate'          => { 'slope' => 'both',     'units' => 'calls/second' },
                 },
             },
             {
                 'name'          => '\"kafka.server\":type=\"BrokerTopicMetrics\",name=*',
-                "resultAlias"   => 'kafka.server.BrokerTopicMetrics',
+                'resultAlias'   => 'kafka.server.BrokerTopicMetrics',
                 'typeNames'     => ['name'],
                 'attrs'         => {
-                    'Count' => { 'slope' => 'both' },
+                    'Count'             => { 'slope' => 'positive' },
+                    'FifteenMinuteRate' => { 'slope' => 'both'     },
+                    'FiveMinuteRate'    => { 'slope' => 'both'     },
+                    'OneMinuteRate'     => { 'slope' => 'both'     },
+                    'MeanRate'          => { 'slope' => 'both'     },
                 },
             },
             {
                   'name'        => '\"kafka.server\":type=\"ReplicaManager\",name=\"UnderReplicatedPartitions\"',
-                  "resultAlias" => 'kafka.server.ReplicaManager.UnderReplicatedPartitions',
+                  'resultAlias' => 'kafka.server.ReplicaManager.UnderReplicatedPartitions',
                   'attrs'       => {
-                      'Value' => { 'units' => 'partitions', 'slope' => 'both' },
+                      'Value'           => { 'slope' => 'both', 'units' => 'partitions' },
                   },
             },
             {
                   'name'         => '\"kafka.server\":type=\"ReplicaManager\",name=\"PartitionCount\"',
-                  "resultAlias"   => 'kafka.server.ReplicaManager.PartitionCount',
+                  'resultAlias'  => 'kafka.server.ReplicaManager.PartitionCount',
                   'attrs'        => {
-                      'Value' => { 'units' => 'partitions', 'slope' => 'both' },
+                      'Value'           => { 'slope' => 'both', 'units' => 'partitions' },
                   },
             },
             {
                   'name'        => '\"kafka.server\":type=\"ReplicaManager\",name=\"LeaderCount\"',
-                  "resultAlias"   => 'kafka.server.ReplicaManager.LeaderCount',
+                  'resultAlias' => 'kafka.server.ReplicaManager.LeaderCount',
                   'attrs'       => {
-                      'Value' => { 'units' => 'leaders', 'slope' => 'both' },
+                      'Value'           => { 'slope' => 'both', 'units' => 'leaders' },
                   },
             },
             {
                   'name'        => '\"kafka.server\":type=\"ReplicaManager\",name=\"ISRShrinksPerSec\"',
-                  "resultAlias"   => 'kafka.server.ReplicaManager.ISRShrinksPerSec',
+                  'resultAlias' => 'kafka.server.ReplicaManager.ISRShrinks',
                   'attrs'       => {
-                      'Count' => { 'units' => 'shrinks', 'slope' => 'both' },
+                      'Count'             => { 'slope' => 'positive', 'units' => 'shrinks'        },
+                      'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'shrinks/second' },
+                      'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'shrinks/second' },
+                      'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'shrinks/second' },
+                      'MeanRate'          => { 'slope' => 'both',     'units' => 'shrinks/second' },
                   },
             },
             {
                   'name'        => '\"kafka.server\":type=\"ReplicaManager\",name=\"IsrExpandsPerSec\"',
-                  "resultAlias"   => 'kafka.server.ReplicaManager.IsrExpandsPerSec',
+                  'resultAlias' => 'kafka.server.ReplicaManager.IsrExpands',
                   'attrs'       => {
-                      'Count' => { 'units' => 'expands', 'slope' => 'both' },
-                  },
+                      'Count'             => { 'slope' => 'positive', 'units' => 'expands'        },
+                      'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'expands/second' },
+                      'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'expands/second' },
+                      'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'expands/second' },
+                      'MeanRate'          => { 'slope' => 'both',     'units' => 'expands/second' },
+                  }
             },
             {
-                'name'          => '\"kafka.server\":type=\"ReplicaFetcherManager\",name=\"Replica-MaxLag\"',
-                "resultAlias"   => 'kafka.server.ReplicaFetcherManager.Replica-MaxLag',
-                'attrs'         => {
-                    'Value' => { 'units' => 'messages',   'slope' => 'both' },
-                },
-            },
-            {
-                'name'          => '\"kafka.server\":type=\"ProducerRequestPurgatory\",name=\"PurgatorySize\"',
-                "resultAlias"   => 'kafka.server.ProducerRequestPurgatory.PurgatorySize',
-                'attrs'         => {
-                    'Value' => { 'units' => 'messages', 'slope' => 'both' },
-                },
-            },
-            {
-                'name'          => '\"kafka.server\":type=\"FetchRequestPurgatory\",name=\"PurgatorySize\"',
-                "resultAlias"   => 'kafka.server.FetchRequestPurgatory.PurgatorySize',
-                'attrs'         => {
-                    'Value' => { 'units' => 'messages', 'slope' => 'both' },
-                },
-            },
-            {
-                'name'          => '\"kafka.network\":type=\"RequestMetrics\",name=*',
-                "resultAlias"   => 'kafka.network.RequestMetrics',
+                'name'          => '\"kafka.server\":type=\"ReplicaFetcherManager\",name=*',
+                'resultAlias'   => 'kafka.server.ReplicaFetcherManager',
                 'typeNames'     => ['name'],
                 'attrs'         => {
-                    'Count' => { 'slope' => 'both' },
+                    'Value'             => { 'slope' => 'both' },
+                },
+            },
+            {
+                'name'          => '\"kafka.server\":type=\"ProducerRequestPurgatory\",name=*',
+                'resultAlias'   => 'kafka.server.ProducerRequestPurgatory',
+                'typeNames'     => ['name'],
+                'attrs'         => {
+                    'Value'             => { 'slope' => 'both' },
+                },
+            },
+            {
+                'name'          => '\"kafka.server\":type=\"FetchRequestPurgatory\",name=*',
+                'resultAlias'   => 'kafka.server.ProducerRequestPurgatory',
+                'typeNames'     => ['name'],
+                'attrs'         => {
+                    'Value'             => { 'slope' => 'both' },
+                },
+            },
+            {
+                'name'          => '\"kafka.network\":type=\"RequestMetrics\",name=\"*-RequestsPerSec\"',
+                'resultAlias'   => 'kafka.network.RequestMetrics',
+                'typeNames'     => ['name'],
+                'attrs'         => {
+                    'Count'             => { 'slope' => 'positive', 'units' => 'requests'        },
+                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'requests/second' },
+                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'requests/second' },
+                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'requests/second' },
+                    'MeanRate'          => { 'slope' => 'both',     'units' => 'requests/second' },
                 },
             },
             {
                 'name'          => '\"kafka.controller\":type=\"KafkaController\",name=*',
-                "resultAlias"   => 'kafka.controller.KafkaController',
+                'resultAlias'   => 'kafka.controller.KafkaController',
                 'typeNames'     => ['name'],
                 'attrs'         => {
-                    'Value' => { 'slope' => 'both' },
+                    'Value'             => { 'slope' => 'both' },
                 },
             },
             {
-                'name'          => '\"kafka.controller\":type=\"ControllerStats\",name=*',
-                "resultAlias"   => 'kafka.controller.ControllerStats',
-                'typeNames'     => ['name'],
+                'name'          => '\"kafka.controller\":type=\"ControllerStats\",name=\"LeaderElectionRateAndTimeMs\"',
+                'resultAlias'   => 'kafka.controller.ControllerStats.LeaderElection',
                 'attrs'         => {
-                    'Count' => { 'slope' => 'both' },
+                    'Count'             => { 'slope' => 'positive', 'units' => 'calls'        },
+                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'calls/second' },
+                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'calls/second' },
+                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'calls/second' },
+                    'MeanRate'          => { 'slope' => 'both',     'units' => 'calls/second' },
+                },
+            },
+            {
+                'name'          => '\"kafka.controller\":type=\"ControllerStats\",name=\"UncleanLeaderElectionsPerSec\"',
+                'resultAlias'   => 'kafka.controller.ControllerStats.UncleanLeaderElection',
+                'attrs'         => {
+                    'Count'             => { 'slope' => 'positive', 'units' => 'elections'        },
+                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'elections/second' },
+                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'elections/second' },
+                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'elections/second' },
+                    'MeanRate'          => { 'slope' => 'both',     'units' => 'elections/second' },
                 },
             },
         ],
-        default => $query_objects,
+        # else use $objects
+        default => $objects,
     }
 
     # query kafka for jmx metrics
