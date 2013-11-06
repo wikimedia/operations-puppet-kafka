@@ -151,7 +151,7 @@ the [puppet-jmxtrans](https://github.com/wikimedia/puppet-jmxtrans) module.
 ```puppet
 # Include this class on each of your Kafka Broker Servers.
 class { '::kafka::server::jmxtrans':
-    ganglia => 'ganglia.example.com',
+    ganglia => 'ganglia.example.com:8649',
 }
 ```
 
