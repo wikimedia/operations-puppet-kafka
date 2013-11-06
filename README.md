@@ -140,3 +140,22 @@ kafka::mirror::consumer { 'clusterB':
     zookeeper_chroot => ['/kafka/clusterB'],
 }
 ```
+
+## jmxtrans monitoring
+
+This module contains a class called ```kafka::server::jmxtrans```.  It contains
+a useful jmxtrans JSON config object that can be used to tell jmxtrans to send
+to any output writer (Ganglia, Graphite, etc.).  To you use this, you will need
+the [puppet-jmxtrans](https://github.com/wikimedia/puppet-jmxtrans) module.
+
+```puppet
+# Include this class on each of your Kafka Broker Servers.
+class { '::kafka::server::jmxtrans':
+    ganglia => 'ganglia.example.com',
+}
+```
+
+This will install jmxtrans and start render JSON config files for sending
+JVM and Kafka Broker stats to Ganglia.
+See [kafka-jmxtrans.json.md](blob/master/kafka-jmxtrans.json.md) for a fully
+rendered jmxtrans Kafka JSON config file.
