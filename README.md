@@ -157,5 +157,5 @@ class { '::kafka::server::jmxtrans':
 
 This will install jmxtrans and start render JSON config files for sending
 JVM and Kafka Broker stats to Ganglia.
-See [kafka-jmxtrans.json.md](blob/master/kafka-jmxtrans.json.md) for a fully
+See [kafka-jmxtrans.json.md](kafka-jmxtrans.json.md) for a fully
 rendered jmxtrans Kafka JSON config file.
