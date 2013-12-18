@@ -31,6 +31,10 @@
 #
 # $jmx_port                         - Port on which to expose JMX metrics.  Default: 9999
 #
+# $heap_opts                        - Heap options to pass to JVM on startup.  Default: undef
+#
+# $auto_create_topics_enable        - If autocreation of topics is allowed.  Default: false
+#
 # $num_network_threads              - The number of threads handling network
 #                                     requests.  Default: 2
 #
@@ -87,8 +91,9 @@ class kafka::server(
     $zookeeper_chroot                = $kafka::defaults::zookeeper_chroot,
 
     $jmx_port                        = $kafka::defaults::jmx_port,
-    $num_partitions                  = $kafka::defaults::num_partitions,
     $heap_opts                       = $kafka::defaults::heap_opts,
+
+    $auto_create_topics_enable       = $kafka::defaults::auto_create_topics_enable,
 
     $num_network_threads             = $kafka::defaults::num_network_threads,
     $num_io_threads                  = $kafka::defaults::num_io_threads,

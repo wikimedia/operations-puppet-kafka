@@ -46,6 +46,15 @@ log.dirs=<%= Array(@log_dirs).join(',') %>
 # Default to the number of log.dirs.
 num.partitions=<%= Array(@log_dirs).length %>
 
+# The default replication factor for automatically created topics.
+# Default to the number of brokers in this cluster.
+default.replication.factor<%= @brokers.keys.length %>
+
+# Enable auto creation of topic on the server. If this is set to true
+# then attempts to produce, consume, or fetch metadata for a non-existent
+# topic will automatically create it with the default replication factor
+# and number of partitions.
+auto.create.topics.enable=<% @auto_create_topics_enable %>
 
 ############################# Log Flush Policy #############################
 
