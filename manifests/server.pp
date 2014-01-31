@@ -33,6 +33,10 @@
 #
 # $heap_opts                        - Heap options to pass to JVM on startup.  Default: undef
 #
+# $nofiles_ulimit                   - If set, the kafka user's ulimit will be set to this, and the
+#                                     kafka server will set this via ulimit -n.  You
+#                                     will probably need to reboot for this to take effect.
+#
 # $auto_create_topics_enable        - If autocreation of topics is allowed.  Default: false
 #
 # $num_network_threads              - The number of threads handling network
@@ -92,6 +96,7 @@ class kafka::server(
 
     $jmx_port                        = $kafka::defaults::jmx_port,
     $heap_opts                       = $kafka::defaults::heap_opts,
+    $nofiles_ulimit                  = $kafka::defaults::nofiles_ulimit,
 
     $auto_create_topics_enable       = $kafka::defaults::auto_create_topics_enable,
 

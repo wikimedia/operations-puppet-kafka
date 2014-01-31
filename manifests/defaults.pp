@@ -28,6 +28,8 @@ class kafka::defaults {
     $jmx_port                        = 9999
     $log_dirs                        = ['/var/spool/kafka']
     $heap_opts                       = undef
+    $nofiles_ulimit                  = 8192
+
     $auto_create_topics_enable       = false
 
     $num_network_threads             = 2
