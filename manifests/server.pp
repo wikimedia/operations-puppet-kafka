@@ -39,6 +39,13 @@
 #
 # $auto_create_topics_enable        - If autocreation of topics is allowed.  Default: false
 #
+# $num_replica_fetchers             - Number of threads used to replicate messages from leaders.
+#                                     Default: 1
+#
+# $replica_fetch_max_bytes          - The number of bytes of messages to attempt to fetch for each
+#                                     partition in the fetch requests the replicas send to the leader.
+#                                     Default: 1024 * 1024
+#
 # $num_network_threads              - The number of threads handling network
 #                                     requests.  Default: 2
 #
@@ -99,6 +106,8 @@ class kafka::server(
     $nofiles_ulimit                  = $kafka::defaults::nofiles_ulimit,
 
     $auto_create_topics_enable       = $kafka::defaults::auto_create_topics_enable,
+    $num_replica_fetchers            = $kafka::defaults::num_replica_fetchers,
+    $replica_fetch_max_bytes         = $kafka::defaults::replica_fetch_max_bytes,
 
     $num_network_threads             = $kafka::defaults::num_network_threads,
     $num_io_threads                  = $kafka::defaults::num_io_threads,

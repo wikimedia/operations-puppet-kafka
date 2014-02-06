@@ -56,6 +56,16 @@ default.replication.factor=<%= @brokers.keys.length %>
 # and number of partitions.
 auto.create.topics.enable=<%= @auto_create_topics_enable ? 'true' : 'false' %>
 
+# Number of threads used to replicate messages from leaders. Increasing this
+# value can increase the degree of I/O parallelism in the follower broker.
+# This is useful to temporarily increase if you have a broker that needs
+# to catch up on messages to get back into the ISR.
+num.replica.fetchers=<%= @num_replica_fetchers %>
+
+# The number of byes of messages to attempt to fetch for each partition in the
+# fetch requests the replicas send to the leader.
+replica.fetch.max.bytes=<%= @replica_fetch_max_bytes %>
+
 ############################# Log Flush Policy #############################
 
 # The following configurations control the flush of data to disk. This is the most

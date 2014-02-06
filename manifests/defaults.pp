@@ -31,6 +31,8 @@ class kafka::defaults {
     $nofiles_ulimit                  = 8192
 
     $auto_create_topics_enable       = false
+    $num_replica_fetchers            = 1
+    $replica_fetch_max_bytes         = 1048576
 
     $num_network_threads             = 2
     $num_io_threads                  = 2
