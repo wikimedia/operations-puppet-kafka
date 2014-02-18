@@ -133,7 +133,7 @@ class kafka::server::jmxtrans(
             },
             {
                 'name'          => '\"kafka.server\":type=\"FetchRequestPurgatory\",name=*',
-                'resultAlias'   => 'kafka.server.ProducerRequestPurgatory',
+                'resultAlias'   => 'kafka.server.FetchRequestPurgatory',
                 'typeNames'     => ['name'],
                 'attrs'         => {
                     'Value'             => { 'slope' => 'both' },
@@ -149,6 +149,16 @@ class kafka::server::jmxtrans(
                     'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'requests/second' },
                     'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'requests/second' },
                     'MeanRate'          => { 'slope' => 'both',     'units' => 'requests/second' },
+                },
+            },
+            {
+                'name'          => '\"kafka.network\":type=\"RequestMetrics\",name=\"*Ms\"',
+                'resultAlias'   => 'kafka.network.RequestMetrics',
+                'typeNames'     => ['name'],
+                'attrs'         => {
+                    'Count'             => { 'slope' => 'positive', 'units' => 'ms'     },
+                    'Mean'              => { 'slope' => 'both',     'units' => 'ms'     },
+                    'StdDev'            => { 'slope' => 'both',     'units' => 'stddev' },
                 },
             },
             {
