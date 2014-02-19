@@ -56,6 +56,28 @@ default.replication.factor=<%= @brokers.keys.length %>
 # and number of partitions.
 auto.create.topics.enable=<%= @auto_create_topics_enable ? 'true' : 'false' %>
 
+<% if @replica_lag_time_max_ms -%>
+# If a follower hasn't sent any fetch requests for this window of time,
+# the leader will remove the follower from ISR and treat it as dead.
+replica.lag.time.max.ms=<%= @replica_lag_time_max_ms %>
+<% end -%>
+
+<% if @replica_lag_max_messages -%>
+# If a replica falls more than this many messages behind the leader,
+# the leader will remove the follower from ISR and treat it as dead.
+replica.lag.max.messages=<%= @replica_lag_max_messages %>
+<% end -%>
+
+<% if @replica_socket_timeout_ms -%>
+# The socket timeout for network requests to the leader for replicating data.
+replica.socket.timeout.ms=<%= @replica_socket_timeout_ms %>
+<% end -%>
+
+<% if @replica_socket_receive_buffer_bytes -%>
+# The socket receive buffer for network requests to the leader for replicating data.
+replica.socket.receive.buffer.bytes=<%= @replica_socket_receive_buffer_bytes %>
+<% end -%>
+
 # Number of threads used to replicate messages from leaders. Increasing this
 # value can increase the degree of I/O parallelism in the follower broker.
 # This is useful to temporarily increase if you have a broker that needs
