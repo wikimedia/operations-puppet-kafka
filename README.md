@@ -21,8 +21,9 @@ It was originally developed for 0.7.2 at https://github.com/wikimedia/puppet-kaf
 # Requirements
 - Java
 - An Kafka 0.8 package.
-  0.8 is not yet released (as of 2013-06-13), but you can build a .deb package using
-  [operations/debs/kafka debian branch](https://github.com/wikimedia/operations-debs-kafka/tree/debian)
+  You can build a .deb package using the 
+  [operations/debs/kafka debian branch](https://github.com/wikimedia/operations-debs-kafka/tree/debian),
+  or just install using this [prebuilt .deb](http://apt.wikimedia.org/wikimedia/pool/universe/k/kafka/)
 - A running zookeeper cluster.  You can set one up using WMF's
   [puppet-zookeeper module](https://github.com/wikimedia/puppet-zookeeper).
 
@@ -84,7 +85,7 @@ First, you'll need to create the znode manually yourself.  You can use
 ```zkCli.sh``` that ships with Zookeeper, or you can use the kafka built in
 ```zookeeper-shell```:
 
-```bash
+```
 $ kafka zookeeper-shell <zookeeper_host>:2182
 Connecting to kraken-zookeeper
 Welcome to ZooKeeper!
