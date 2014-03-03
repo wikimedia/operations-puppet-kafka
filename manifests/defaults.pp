@@ -46,7 +46,7 @@ class kafka::defaults {
     $socket_request_max_bytes            = 104857600
 
     $log_flush_interval_messages         = 10000
-    $log_flush_interval_ms               = 1000
+    $log_flush_interval_ms               = 3000
 
     $log_retention_hours                 = 168     # 1 week
     $log_retention_bytes                 = undef
