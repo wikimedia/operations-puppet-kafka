@@ -60,9 +60,9 @@
 #                                         Default: 1024 * 1024
 #
 # $num_network_threads                  - The number of threads handling network
-#                                         requests.  Default: 2
+#                                         requests.  Default: 8
 #
-# $num_io_threads                       - The number of threads doing disk I/O.  Default: 2
+# $num_io_threads                       - The number of threads doing disk I/O.  Default: size($log_dirs)
 #
 # $socket_send_buffer_bytes             - The byte size of the send buffer (SO_SNDBUF)
 #                                          used by the socket server.  Default: 1048576
@@ -128,7 +128,7 @@ class kafka::server(
     $replica_fetch_max_bytes             = $kafka::defaults::replica_fetch_max_bytes,
 
     $num_network_threads                 = $kafka::defaults::num_network_threads,
-    $num_io_threads                      = $kafka::defaults::num_io_threads,
+    $num_io_threads                      = size($log_dirs),
     $socket_send_buffer_bytes            = $kafka::defaults::socket_send_buffer_bytes,
     $socket_receive_buffer_bytes         = $kafka::defaults::socket_receive_buffer_bytes,
     $socket_request_max_bytes            = $kafka::defaults::socket_request_max_bytes,
