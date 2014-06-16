@@ -60,7 +60,7 @@
 #                                         Default: 1024 * 1024
 #
 # $num_network_threads                  - The number of threads handling network
-#                                         requests.  Default: 8
+#                                         requests.  Default: 3
 #
 # $num_io_threads                       - The number of threads doing disk I/O.  Default: size($log_dirs)
 #

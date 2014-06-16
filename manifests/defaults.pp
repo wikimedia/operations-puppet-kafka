@@ -39,7 +39,7 @@ class kafka::defaults {
     $num_replica_fetchers                = 1
     $replica_fetch_max_bytes             = 1048576
 
-    $num_network_threads                 = 8
+    $num_network_threads                 = 3
     # $num_io_threads                      = size($log_dirs) # this default is directly in server.pp
     $socket_send_buffer_bytes            = 1048576
     $socket_receive_buffer_bytes         = 1048576
