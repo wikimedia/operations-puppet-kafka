@@ -48,7 +48,7 @@ num.partitions=<%= Array(@log_dirs).length %>
 
 # The default replication factor for automatically created topics.
 # Default to the number of brokers in this cluster.
-default.replication.factor=<%= @brokers.keys.length %>
+default.replication.factor=<%= @default_replication_factor %>
 
 # Enable auto creation of topic on the server. If this is set to true
 # then attempts to produce, consume, or fetch metadata for a non-existent
