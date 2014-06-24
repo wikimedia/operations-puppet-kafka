@@ -57,6 +57,8 @@ class kafka::defaults {
 
     $metrics_properties                  = undef
 
+    $jvm_performance_opts                = undef
+
     # Kafka package version.
     $version                             = 'installed'
 

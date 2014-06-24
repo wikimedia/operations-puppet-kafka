@@ -105,6 +105,8 @@
 #
 # $kafka_log_file                       - File in which to write Kafka logs (not event message data).
 #                                         Default: /var/log/kafka/kafka.log
+# $jvm_performance_opts                 - Value to use for KAFKA_JVM_PERFORMANCE_OPTS in /etc/default/kafka.
+#                                         This controls GC settings.  Default: undef.
 
 #
 class kafka::server(
@@ -148,6 +150,7 @@ class kafka::server(
 
     $metrics_properties                  = $kafka::defaults::metrics_properties,
     $kafka_log_file                      = $kafka::defaults::kafka_log_file,
+    $jvm_performance_opts                = $kafka::defaults::jvm_performance_opts,
 
     $server_properties_template          = $kafka::defaults::server_properties_template,
     $default_template                    = $kafka::defaults::server_default_template,
