@@ -16,7 +16,9 @@ class kafka::defaults {
     }
 
     $zookeeper_hosts                     = ['localhost:2181']
-    $zookeeper_connection_timeout_ms     = 1000000
+    $zookeeper_connection_timeout_ms     = 6000
+    $zookeeper_session_timeout_ms        = 6000
+
     $zookeeper_chroot                    = undef
 
     $kafka_log_file                      = '/var/log/kafka/kafka.log'

@@ -21,7 +21,10 @@
 #                                     for instructions on how to do so.
 #
 # $zookeeper_connection_timeout_ms  - Timeout in ms for connecting to zookeeper.
-#                                     Default: 1000000
+#                                     Default: 6000
+#
+# $zookeeper_session_timeout_ms     - Timeout in ms for session to zookeeper.
+#                                     Default: 6000
 #
 # $consumer_group_id                - Consumer ID.  This will be used to save the
 #                                     consumed high water mark for this consumer
@@ -30,7 +33,8 @@
 define kafka::mirror::consumer(
     $zookeeper_hosts,
     $zookeeper_chroot                   = undef,
-    $zookeeper_connection_timeout_ms    = 1000000,
+    $zookeeper_connection_timeout_ms    = 6000,
+    $zookeeper_session_timeout_ms       = 6000,
     $consumer_group_id                  = "mirror${zookeeper_chroot}",
     $consumer_properties_template       = 'kafka/consumer.properties.erb'
 )

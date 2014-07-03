@@ -20,8 +20,11 @@
 # $zookeeper_hosts                      - Array of zookeeper hostname/IP(:port)s.
 #                                         Default: ['localhost:2181]
 #
-# $zookeeper_connection_timeout_ms      - Timeout in ms for connecting to zookeeper.
-#                                         Default: 1000000
+# $zookeeper_connection_timeout_ms      - Timeout in ms for connecting to Zookeeper.
+#                                         Default: 6000
+#
+# $zookeeper_session_timeout_ms         - Timeout in ms for session to Zookeeper.
+#                                         Default: 6000
 #
 # $zookeeper_chroot                     - Path in zookeeper in which to keep Kafka data.
 #                                         Default: undef (the root znode).  Note that if you set
@@ -117,6 +120,8 @@ class kafka::server(
 
     $zookeeper_hosts                     = $kafka::defaults::zookeeper_hosts,
     $zookeeper_connection_timeout_ms     = $kafka::defaults::zookeeper_connection_timeout_ms,
+    $zookeeper_session_timeout_ms        = $kafka::defaults::zookeeper_session_timeout_ms,
+
     $zookeeper_chroot                    = $kafka::defaults::zookeeper_chroot,
 
     $jmx_port                            = $kafka::defaults::jmx_port,

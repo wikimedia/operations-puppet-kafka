@@ -9,8 +9,12 @@
 # server. e.g. "127.0.0.1:3000,127.0.0.1:3001,127.0.0.1:3002"
 zookeeper.connect=<%= @zookeeper_hosts.sort.join(',') %><%= @zookeeper_chroot if @zookeeper_chroot %>
 
-# timeout in ms for connecting to zookeeper
+# The max time that the client waits while establishing a connection to Zookeeper.
 zookeeper.connection.timeout.ms=<%= @zookeeper_connection_timeout_ms %>
+
+# ZooKeeper session timeout. If the consumer fails to heartbeat to Zookeeper
+# for this period of time it is considered dead and a rebalance will occur.
+zookeeper.session.timeout.ms=<%= @zookeeper_session_timeout_ms %>
 
 #consumer group id
 group.id=<%= @consumer_group_id %>
