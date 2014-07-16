@@ -48,6 +48,7 @@
 # $replica_lag_time_max_ms              - If a follower hasn't sent any fetch requests for this window
 #                                         of time, the leader will remove the follower from ISR.
 #                                         Default: undef
+#
 # $replica_lag_max_messages             - If a replica falls more than this many messages behind the leader,
 #                                         the leader will remove the follower from ISR.
 #                                         Default: undef
@@ -108,6 +109,7 @@
 #
 # $kafka_log_file                       - File in which to write Kafka logs (not event message data).
 #                                         Default: /var/log/kafka/kafka.log
+#
 # $jvm_performance_opts                 - Value to use for KAFKA_JVM_PERFORMANCE_OPTS in /etc/default/kafka.
 #                                         This controls GC settings.  Default: undef.
 

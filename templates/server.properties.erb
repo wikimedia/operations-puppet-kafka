@@ -117,11 +117,11 @@ log.flush.interval.ms=<%= @log_flush_interval_ms %>
 # from the end of the log.
 
 # The minimum age of a log file to be eligible for deletion
-<%= @log_retention_hours ? "log.retention.hours=#{log_retention_hours}" : "#log.retention.hours=" %>
+<%= @log_retention_hours ? "log.retention.hours=#{@log_retention_hours}" : "#log.retention.hours=" %>
 
 # A size-based retention policy for logs. Segments are pruned from the log as long as the remaining
 # segments don't drop below log.retention.bytes.
-<%= @log_retention_bytes ? "log.retention.bytes=#{log_retention_bytes}" : "#log.retention.bytes=" %>
+<%= @log_retention_bytes ? "log.retention.bytes=#{@log_retention_bytes}" : "#log.retention.bytes=" %>
 
 # The maximum size of a log segment file. When this size is reached a new log segment will be created.
 log.segment.bytes=<%= @log_segment_bytes %>
