@@ -27,6 +27,7 @@ class kafka::defaults {
     $consumer_group_id                   = 'test-consumer-group'
 
     # Broker Server settings
+    $java_home                           = undef
     $jmx_port                            = 9999
     $log_dirs                            = ['/var/spool/kafka']
     $heap_opts                           = undef

@@ -8,6 +8,10 @@ KAFKA_USER=kafka
 KAFKA_GROUP=kafka
 KAFKA_CONFIG=/etc/kafka
 
+<% if @java_home -%>
+JAVA_HOME="<%= @java_home %>"
+<% end -%>
+
 KAFKA_NOFILES_ULIMIT=<%= @nofiles_ulimit %>
 
 # The default JMX_PORT for Kafka Brokers is 9999.
