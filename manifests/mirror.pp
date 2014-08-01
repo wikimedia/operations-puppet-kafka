@@ -49,8 +49,13 @@ class kafka::mirror(
     # you want installed.
     require ::kafka
 
+    package { 'kafka-mirror':
+        ensure => $::kafka::version
+    }
+
     file { '/etc/default/kafka-mirror':
-        content => template($default_template)
+        content => template($default_template),
+        require => Package['kafka-mirror'],
     }
 
     # Make sure /etc/kafka/mirror is a directory.
@@ -58,6 +63,7 @@ class kafka::mirror(
     # properties files out of this directory.
     file { '/etc/kafka/mirror':
         ensure => 'directory',
+        require => Package['kafka-mirror'],
     }
 
     # MirrorMaker will produce to this cluster
@@ -65,6 +71,7 @@ class kafka::mirror(
     $brokers = $destination_brokers
     file { '/etc/kafka/mirror/producer.properties':
         content => template($producer_properties_template),
+        require => Package['kafka-mirror'],
     }
 
     # Start the Kafka MirrorMaker daemon.

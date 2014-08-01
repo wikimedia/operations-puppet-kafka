@@ -1,1 +1,0 @@
-- Puppetization of per topic partition settings.

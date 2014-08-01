@@ -28,7 +28,7 @@ end
 
 # list of brokers used for bootstrapping
 # format: host1:port1,host2:port2 ...
-broker.list=<%= broker_list.join(',') %>
+metadata.broker.list=<%= broker_list.join(',') %>
 
 # specifies whether the messages are sent asynchronously (async) or synchronously (sync)
 producer.type=<%= @producer_type %>

@@ -180,6 +180,10 @@ class kafka::server(
     # you want installed.
     require ::kafka
 
+    package { 'kafka-server':
+        ensure => $::kafka::version
+    }
+
     # Get this broker's id and port out of the $kafka::hosts configuration hash
     $broker_id   = $brokers[$::fqdn]['id']
 
@@ -196,9 +200,11 @@ class kafka::server(
     # Render out Kafka Broker config files.
     file { '/etc/default/kafka':
         content => template($default_template),
+        require => Package['kafka-server'],
     }
     file { '/etc/kafka/server.properties':
         content => template($server_properties_template),
+        require => Package['kafka-server'],
     }
 
     # This is the message data directory,
@@ -209,12 +215,14 @@ class kafka::server(
         owner   => 'kafka',
         group   => 'kafka',
         mode    => '0755',
+        require => Package['kafka-server'],
     }
 
     # log4j configuration for Kafka daemon
     # process logs (this uses $kafka_log_dir).
     file { '/etc/kafka/log4j.properties':
         content => template($log4j_properties_template),
+        require => Package['kafka-server'],
     }
 
     # Start the Kafka server.
