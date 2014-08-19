@@ -21,9 +21,9 @@ It was originally developed for 0.7.2 at https://github.com/wikimedia/puppet-kaf
 # Requirements
 - Java
 - An Kafka 0.8 package.
-  You can build a .deb package using the 
+  You can build a .deb package using the
   [operations/debs/kafka debian branch](https://github.com/wikimedia/operations-debs-kafka/tree/debian),
-  or just install using this [prebuilt .deb](http://apt.wikimedia.org/wikimedia/pool/universe/k/kafka/)
+  or just install using this [prebuilt .deb](http://apt.wikimedia.org/wikimedia/pool/main/k/kafka/)
 - A running zookeeper cluster.  You can set one up using WMF's
   [puppet-zookeeper module](https://github.com/wikimedia/puppet-zookeeper).
 
@@ -64,7 +64,7 @@ be unique for each Kafka Broker Server host.  ```port``` is optional, and defaul
 to 9092.
 
 Each Kafka Broker Server's ```broker_id``` and ```port``` properties in server.properties
-will be set based by looking up the node's ```$::fqdn``` in the hosts 
+will be set based by looking up the node's ```$::fqdn``` in the hosts
 Hash passed into the ```kafka``` base class.
 
 ```zookeeper_hosts``` is an array of Zookeeper host:port pairs.
