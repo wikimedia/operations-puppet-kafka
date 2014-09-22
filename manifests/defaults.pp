@@ -28,6 +28,7 @@ class kafka::defaults {
 
     # Broker Server settings
     $java_home                           = undef
+    $java_opts                           = undef
     $jmx_port                            = 9999
     $log_dirs                            = ['/var/spool/kafka']
     $heap_opts                           = undef

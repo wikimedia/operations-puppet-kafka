@@ -12,6 +12,13 @@ KAFKA_CONFIG=/etc/kafka
 JAVA_HOME="<%= @java_home %>"
 <% end -%>
 
+# Extra Java options
+<% if @java_opts -%>
+JAVA_OPTS="<%= @java_opts %>"
+<% else -%>
+#JAVA_OPTS=""
+<% end -%>
+
 KAFKA_NOFILES_ULIMIT=<%= @nofiles_ulimit %>
 
 # The default JMX_PORT for Kafka Brokers is 9999.
