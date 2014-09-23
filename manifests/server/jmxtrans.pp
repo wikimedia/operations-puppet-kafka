@@ -25,6 +25,7 @@ class kafka::server::jmxtrans(
     $ganglia        = undef,
     $graphite       = undef,
     $outfile        = undef,
+    $group_prefix   = undef,
     $objects        = undef,
     $run_interval   = 15,
     $log_level      = 'info',
@@ -39,9 +40,10 @@ class kafka::server::jmxtrans(
 
     # query for metrics from Kafka's JVM
     jmxtrans::metrics::jvm { $jmx:
-        outfile              => $outfile,
         ganglia              => $ganglia,
         graphite             => $graphite,
+        outfile              => $outfile,
+        group_prefix         => $group_prefix,
     }
 
 
@@ -201,9 +203,9 @@ class kafka::server::jmxtrans(
         jmx                  => $jmx,
         outfile              => $outfile,
         ganglia              => $ganglia,
-        ganglia_group_name   => 'kafka',
+        ganglia_group_name   => "${group_prefix}kafka",
         graphite             => $graphite,
-        graphite_root_prefix => 'kafka',
+        graphite_root_prefix => "${group_prefix}kafka",
         objects              => $kafka_objects,
     }
 }
