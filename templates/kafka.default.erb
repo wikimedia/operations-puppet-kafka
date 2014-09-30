@@ -19,6 +19,13 @@ JAVA_OPTS="<%= @java_opts %>"
 #JAVA_OPTS=""
 <% end -%>
 
+# Extra classpath entries
+<% if @classpath -%>
+CLASSPATH="<%= @classpath %>"
+<% else -%>
+#CLASSPATH=""
+<% end -%>
+
 KAFKA_NOFILES_ULIMIT=<%= @nofiles_ulimit %>
 
 # The default JMX_PORT for Kafka Brokers is 9999.
