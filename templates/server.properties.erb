@@ -155,7 +155,10 @@ zookeeper.session.timeout.ms=<%= @zookeeper_session_timeout_ms %>
 <% if @metrics_properties -%>
 ############################# Kafka Metrics Reporter ############################
 
+<% if not @metrics_properties['kafka.metrics.polling.interval.secs'] -%>
 kafka.metrics.polling.interval.secs=5
+<% end -%>
+
 <% @metrics_properties.keys.sort.each do |key| -%>
 <%= key %>=<%= @metrics_properties[key] %>
 <% end -%>
