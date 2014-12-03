@@ -59,10 +59,10 @@ class kafka::server::jmxtrans(
                 'resultAlias'   => 'kafka.log.LogFlushStats.LogFlush',
                 'attrs'         => {
                     'Count'             => { 'slope' => 'positive', 'units' => 'calls/second' },
-                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'calls/second' },
-                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'calls/second' },
-                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'calls/second' },
-                    'MeanRate'          => { 'slope' => 'both',     'units' => 'calls/second' },
+                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'calls/second', 'bucketType' => 'g' },
+                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'calls/second', 'bucketType' => 'g' },
+                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'calls/second', 'bucketType' => 'g' },
+                    'MeanRate'          => { 'slope' => 'both',     'units' => 'calls/second', 'bucketType' => 'g' },
                 },
             },
             {
@@ -71,31 +71,31 @@ class kafka::server::jmxtrans(
                 'typeNames'     => ['name'],
                 'attrs'         => {
                     'Count'             => { 'slope' => 'positive' },
-                    'FifteenMinuteRate' => { 'slope' => 'both'     },
-                    'FiveMinuteRate'    => { 'slope' => 'both'     },
-                    'OneMinuteRate'     => { 'slope' => 'both'     },
-                    'MeanRate'          => { 'slope' => 'both'     },
+                    'FifteenMinuteRate' => { 'slope' => 'both', 'bucketType' => 'g' },
+                    'FiveMinuteRate'    => { 'slope' => 'both', 'bucketType' => 'g' },
+                    'OneMinuteRate'     => { 'slope' => 'both', 'bucketType' => 'g' },
+                    'MeanRate'          => { 'slope' => 'both', 'bucketType' => 'g' },
                 },
             },
             {
                   'name'        => '\"kafka.server\":type=\"ReplicaManager\",name=\"UnderReplicatedPartitions\"',
                   'resultAlias' => 'kafka.server.ReplicaManager.UnderReplicatedPartitions',
                   'attrs'       => {
-                      'Value'           => { 'slope' => 'both', 'units' => 'partitions' },
+                      'Value'           => { 'slope' => 'both', 'units' => 'partitions', 'bucketType' => 'g' },
                   },
             },
             {
                   'name'         => '\"kafka.server\":type=\"ReplicaManager\",name=\"PartitionCount\"',
                   'resultAlias'  => 'kafka.server.ReplicaManager.PartitionCount',
                   'attrs'        => {
-                      'Value'           => { 'slope' => 'both', 'units' => 'partitions' },
+                      'Value'           => { 'slope' => 'both', 'units' => 'partitions', 'bucketType' => 'g' },
                   },
             },
             {
                   'name'        => '\"kafka.server\":type=\"ReplicaManager\",name=\"LeaderCount\"',
                   'resultAlias' => 'kafka.server.ReplicaManager.LeaderCount',
                   'attrs'       => {
-                      'Value'           => { 'slope' => 'both', 'units' => 'leaders' },
+                      'Value'           => { 'slope' => 'both', 'units' => 'leaders', 'bucketType' => 'g' },
                   },
             },
             {
@@ -103,10 +103,10 @@ class kafka::server::jmxtrans(
                   'resultAlias' => 'kafka.server.ReplicaManager.ISRShrinks',
                   'attrs'       => {
                       'Count'             => { 'slope' => 'positive', 'units' => 'shrinks'        },
-                      'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'shrinks/second' },
-                      'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'shrinks/second' },
-                      'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'shrinks/second' },
-                      'MeanRate'          => { 'slope' => 'both',     'units' => 'shrinks/second' },
+                      'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'shrinks/second', 'bucketType' => 'g' },
+                      'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'shrinks/second', 'bucketType' => 'g' },
+                      'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'shrinks/second', 'bucketType' => 'g' },
+                      'MeanRate'          => { 'slope' => 'both',     'units' => 'shrinks/second', 'bucketType' => 'g' },
                   },
             },
             {
@@ -114,10 +114,10 @@ class kafka::server::jmxtrans(
                   'resultAlias' => 'kafka.server.ReplicaManager.ISRExpands',
                   'attrs'       => {
                       'Count'             => { 'slope' => 'positive', 'units' => 'expands'        },
-                      'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'expands/second' },
-                      'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'expands/second' },
-                      'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'expands/second' },
-                      'MeanRate'          => { 'slope' => 'both',     'units' => 'expands/second' },
+                      'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'expands/second', 'bucketType' => 'g' },
+                      'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'expands/second', 'bucketType' => 'g' },
+                      'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'expands/second', 'bucketType' => 'g' },
+                      'MeanRate'          => { 'slope' => 'both',     'units' => 'expands/second', 'bucketType' => 'g' },
                   }
             },
             {
@@ -125,7 +125,7 @@ class kafka::server::jmxtrans(
                 'resultAlias'   => 'kafka.server.ReplicaFetcherManager',
                 'typeNames'     => ['name'],
                 'attrs'         => {
-                    'Value'             => { 'slope' => 'both' },
+                    'Value'             => { 'slope' => 'both', 'bucketType' => 'g' },
                 },
             },
             {
@@ -133,7 +133,7 @@ class kafka::server::jmxtrans(
                 'resultAlias'   => 'kafka.server.ProducerRequestPurgatory',
                 'typeNames'     => ['name'],
                 'attrs'         => {
-                    'Value'             => { 'slope' => 'both' },
+                    'Value'             => { 'slope' => 'both', 'bucketType' => 'g' },
                 },
             },
             {
@@ -141,7 +141,7 @@ class kafka::server::jmxtrans(
                 'resultAlias'   => 'kafka.server.FetchRequestPurgatory',
                 'typeNames'     => ['name'],
                 'attrs'         => {
-                    'Value'             => { 'slope' => 'both' },
+                    'Value'             => { 'slope' => 'both', 'bucketType' => 'g' },
                 },
             },
             {
@@ -150,10 +150,10 @@ class kafka::server::jmxtrans(
                 'typeNames'     => ['name'],
                 'attrs'         => {
                     'Count'             => { 'slope' => 'positive', 'units' => 'requests'        },
-                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'requests/second' },
-                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'requests/second' },
-                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'requests/second' },
-                    'MeanRate'          => { 'slope' => 'both',     'units' => 'requests/second' },
+                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'requests/second', 'bucketType' => 'g' },
+                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'requests/second', 'bucketType' => 'g' },
+                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'requests/second', 'bucketType' => 'g' },
+                    'MeanRate'          => { 'slope' => 'both',     'units' => 'requests/second', 'bucketType' => 'g' },
                 },
             },
             {
@@ -162,8 +162,8 @@ class kafka::server::jmxtrans(
                 'typeNames'     => ['name'],
                 'attrs'         => {
                     'Count'             => { 'slope' => 'positive', 'units' => 'ms'     },
-                    'Mean'              => { 'slope' => 'both',     'units' => 'ms'     },
-                    'StdDev'            => { 'slope' => 'both',     'units' => 'stddev' },
+                    'Mean'              => { 'slope' => 'both',     'units' => 'ms'    , 'bucketType' => 'g' },
+                    'StdDev'            => { 'slope' => 'both',     'units' => 'stddev', 'bucketType' => 'g' },
                 },
             },
             {
@@ -171,7 +171,7 @@ class kafka::server::jmxtrans(
                 'resultAlias'   => 'kafka.controller.KafkaController',
                 'typeNames'     => ['name'],
                 'attrs'         => {
-                    'Value'             => { 'slope' => 'both' },
+                    'Value'             => { 'slope' => 'both', 'bucketType' => 'g' },
                 },
             },
             {
@@ -179,10 +179,10 @@ class kafka::server::jmxtrans(
                 'resultAlias'   => 'kafka.controller.ControllerStats.LeaderElection',
                 'attrs'         => {
                     'Count'             => { 'slope' => 'positive', 'units' => 'calls'        },
-                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'calls/second' },
-                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'calls/second' },
-                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'calls/second' },
-                    'MeanRate'          => { 'slope' => 'both',     'units' => 'calls/second' },
+                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'calls/second', 'bucketType' => 'g' },
+                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'calls/second', 'bucketType' => 'g' },
+                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'calls/second', 'bucketType' => 'g' },
+                    'MeanRate'          => { 'slope' => 'both',     'units' => 'calls/second', 'bucketType' => 'g' },
                 },
             },
             {
@@ -190,10 +190,10 @@ class kafka::server::jmxtrans(
                 'resultAlias'   => 'kafka.controller.ControllerStats.UncleanLeaderElection',
                 'attrs'         => {
                     'Count'             => { 'slope' => 'positive', 'units' => 'elections'        },
-                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'elections/second' },
-                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'elections/second' },
-                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'elections/second' },
-                    'MeanRate'          => { 'slope' => 'both',     'units' => 'elections/second' },
+                    'FifteenMinuteRate' => { 'slope' => 'both',     'units' => 'elections/second', 'bucketType' => 'g' },
+                    'FiveMinuteRate'    => { 'slope' => 'both',     'units' => 'elections/second', 'bucketType' => 'g' },
+                    'OneMinuteRate'     => { 'slope' => 'both',     'units' => 'elections/second', 'bucketType' => 'g' },
+                    'MeanRate'          => { 'slope' => 'both',     'units' => 'elections/second', 'bucketType' => 'g' },
                 },
             },
         ],
