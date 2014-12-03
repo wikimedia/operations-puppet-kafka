@@ -8,6 +8,7 @@
 # $jmx_port      - Kafka JMX port
 # $ganglia       - Ganglia host:port
 # $graphite      - Graphite host:port
+# $statsd        - statsd host:port
 # $outfile       - outfile to which Kafka stats will be written.
 # $objects       - objects parameter to pass to jmxtrans::metrics.  Only use
 #                  this if you need to override the default ones that this
@@ -24,6 +25,7 @@ class kafka::server::jmxtrans(
     $jmx_port       = $kafka::defaults::jmx_port,
     $ganglia        = undef,
     $graphite       = undef,
+    $statsd         = undef,
     $outfile        = undef,
     $group_prefix   = undef,
     $objects        = undef,
@@ -206,6 +208,8 @@ class kafka::server::jmxtrans(
         ganglia_group_name   => "${group_prefix}kafka",
         graphite             => $graphite,
         graphite_root_prefix => "${group_prefix}kafka",
+        statsd               => $statsd,
+        statsd_root_prefix   => "${group_prefix}kafka",
         objects              => $kafka_objects,
     }
 }
