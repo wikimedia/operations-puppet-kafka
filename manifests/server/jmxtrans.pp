@@ -44,6 +44,7 @@ class kafka::server::jmxtrans(
     jmxtrans::metrics::jvm { $jmx:
         ganglia              => $ganglia,
         graphite             => $graphite,
+        statsd               => $statsd,
         outfile              => $outfile,
         group_prefix         => $group_prefix,
     }
