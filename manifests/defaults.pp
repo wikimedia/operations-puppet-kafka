@@ -24,6 +24,7 @@ class kafka::defaults {
     $kafka_log_file                      = '/var/log/kafka/kafka.log'
     $producer_type                       = 'async'
     $producer_batch_num_messages         = 200
+    $producer_serializer_class           = 'kafka.serializer.StringEncoder'
     $consumer_group_id                   = 'test-consumer-group'
 
     # Broker Server settings

@@ -41,7 +41,7 @@ producer.type=<%= @producer_type %>
 compression.codec=none
 
 # message encoder
-serializer.class=kafka.serializer.StringEncoder
+serializer.class=<%= @producer_serializer_class %>
 
 # allow topic level compression
 #compressed.topics=
