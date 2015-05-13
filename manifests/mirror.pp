@@ -71,7 +71,7 @@ class kafka::mirror(
     }
 
     # Automatically create consumers if provided
-    if (size($consumers) > 0) {
+    if (size(keys($consumers)) > 0) {
         create_resources('kafka::mirror::consumer', $consumers)
     }
 
