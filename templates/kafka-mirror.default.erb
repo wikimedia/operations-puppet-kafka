@@ -40,8 +40,11 @@ KAFKA_HEAP_OPTS=<%= @heap_opts %>
 #KAFKA_MIRROR_PRODUCER_CONFIG=/etc/kafka/mirror/producer.properties
 
 # Only set one of the following.
-#KAFKA_MIRROR_WHITELIST='.*'
-#KAFKA_MIRROR_BLACKLIST=''
+<% if @topic_whitelist -%>
+KAFKA_MIRROR_WHITELIST='<%= @topic_whitelist %>'
+<% elsif @topic_blacklist -%>
+KAFKA_MIRROR_BLACKLIST='<%= @topic_blacklist %>'
+<% end -%>
 
 #KAFKA_MIRROR_NUM_STREAMS=1
 #KAFKA_MIRROR_NUM_PRODUCERS=1
