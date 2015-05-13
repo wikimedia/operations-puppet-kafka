@@ -14,6 +14,7 @@ class kafka::defaults {
             'id'   => 1,
         },
     }
+    $consumers = {}
 
     $zookeeper_hosts                     = ['localhost:2181']
     $zookeeper_connection_timeout_ms     = 6000

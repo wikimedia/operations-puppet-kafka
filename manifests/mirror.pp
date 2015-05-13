@@ -10,12 +10,16 @@
 #                               should be of the form:
 #                               { 'hostA' => { 'id' => 1, 'port' => 12345 }, 'hostB' => { 'id' => 2 }, ... }
 #                               'port' is optional, and will default to 9092.
+# $consumers                  - Hash of Kafka consumers for automatic kafka::mirror::consumer creation:
+#                               { 'consumerNameA' => { 'zookeeper_hosts' => [ 'host1' ]},
+#                                 'consumerNameB' => { 'zookeeper_hosts' => [ 'host2' ]}, ... }
 
 # $jmx_port                    - Port on which to expose JMX metrics.  Default: 9999
 #
 class kafka::mirror(
     $enabled                               = true,
     $destination_brokers                   = $kafka::defaults::brokers,
+    $consumers                             = $kafka::defaults::consumers,
 
     $jmx_port                              = $kafka::defaults::jmx_port,
 
@@ -64,6 +68,11 @@ class kafka::mirror(
     file { '/etc/kafka/mirror':
         ensure => 'directory',
         require => Package['kafka-mirror'],
+    }
+
+    # Automatically create consumers if provided
+    if (size($consumers) > 0) {
+        create_resources('kafka::mirror::consumer', $consumers)
     }
 
     # MirrorMaker will produce to this cluster
