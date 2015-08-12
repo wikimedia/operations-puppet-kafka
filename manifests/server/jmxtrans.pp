@@ -92,6 +92,11 @@ class kafka::server::jmxtrans(
                     'attrs'         => $kafka_rate_jmx_attrs,
                 },
                 # Per Topic Metrics
+                # These are listed separately so that that each name.topic
+                # can be keyed individually.  If you used ['name', 'topic']
+                # as typeNames, the keys would be like
+                # kafka.server.BrokerTopicMetrics.BytesInPerSec_webrequest_text.OneMinuteRate
+                # Instead of kafka.server.BrokerTopicMetrics.BytesInPerSec.webrequest_text.OneMinuteRate
                 {
                     'name'          => 'kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec,topic=*',
                     'resultAlias'   => 'kafka.server.BrokerTopicMetrics.BytesInPerSec',
@@ -130,11 +135,29 @@ class kafka::server::jmxtrans(
                 },
 
                 # ReplicaManager Metrics
+                # These are listed separately because they don't all share the
+                # same attributes.
                 {
-                    'name'          => 'kafka.server:type=ReplicaManager,name=*',
-                    'resultAlias'   => 'kafka.server.ReplicaManager',
-                    'typeNames'     => ['name'],
+                    'name'          => 'kafka.server:type=ReplicaManager,name=IsrExpandsPerSec',
+                    'resultAlias'   => 'kafka.server.ReplicaManager.IsrExpandsPerSec',
                     'attrs'         => $kafka_rate_jmx_attrs,
+                },
+                {
+                    'name'          => 'kafka.server:type=ReplicaManager,name=IsrShrinksPerSec',
+                    'resultAlias'   => 'kafka.server.ReplicaManager.IsrShrinksPerSec',
+                    'attrs'         => $kafka_rate_jmx_attrs,
+                },                {
+                    'name'          => 'kafka.server:type=ReplicaManager,name=LeaderCount',
+                    'resultAlias'   => 'kafka.server.ReplicaManager.LeaderCount',
+                    'attrs'         => $kafka_value_jmx_attrs,
+                },                {
+                    'name'          => 'kafka.server:type=ReplicaManager,name=PartitionCount',
+                    'resultAlias'   => 'kafka.server.ReplicaManager.PartitionCount',
+                    'attrs'         => $kafka_value_jmx_attrs,
+                },                {
+                    'name'          => 'kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions',
+                    'resultAlias'   => 'kafka.server.ReplicaManager.UnderReplicatedPartitions',
+                    'attrs'         => $kafka_value_jmx_attrs,
                 },
 
                 # ReplicaFetcherManager
