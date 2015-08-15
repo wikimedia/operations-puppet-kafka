@@ -36,6 +36,7 @@ class kafka::defaults {
     $nofiles_ulimit                      = 8192
 
     $auto_create_topics_enable           = false
+    $auto_leader_rebalance_enable        = true
 
     $replica_lag_time_max_ms             = undef
     $replica_lag_max_messages            = undef

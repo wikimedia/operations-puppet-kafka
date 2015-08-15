@@ -48,6 +48,9 @@
 #
 # $auto_create_topics_enable            - If autocreation of topics is allowed.  Default: false
 #
+# $auto_leader_rebalance_enable         - If leaders should be auto rebalanced.
+#                                         Default: true
+#
 # $num_partitions                       - The default number of partitions per topic.
 #                                         Default: size($log_dirs)
 #
@@ -143,6 +146,7 @@ class kafka::server(
     $nofiles_ulimit                      = $kafka::defaults::nofiles_ulimit,
 
     $auto_create_topics_enable           = $kafka::defaults::auto_create_topics_enable,
+    $auto_leader_rebalance_enable        = $kafka::defaults::auto_leader_rebalance_enable,
 
     $num_partitions                      = size($log_dirs),
     $default_replication_factor          = size(keys($brokers)),

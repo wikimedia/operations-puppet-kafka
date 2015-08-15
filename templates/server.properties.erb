@@ -56,6 +56,11 @@ default.replication.factor=<%= @default_replication_factor %>
 # and number of partitions.
 auto.create.topics.enable=<%= @auto_create_topics_enable ? 'true' : 'false' %>
 
+# If this is enabled the controller will automatically try to balance
+# leadership for partitions among the brokers by periodically returning
+# leadership to the "preferred" replica for each partition if it is available.
+auto.leader.rebalance.enable=<%= @auto_leader_rebalance_enable %>
+
 <% if @replica_lag_time_max_ms -%>
 # If a follower hasn't sent any fetch requests for this window of time,
 # the leader will remove the follower from ISR and treat it as dead.
