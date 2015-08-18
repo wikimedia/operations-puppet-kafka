@@ -83,7 +83,9 @@ class kafka::defaults {
     $consumer_properties_template        = 'kafka/consumer.properties.erb'
     $log4j_properties_template           = 'kafka/log4j.properties.erb'
     $server_properties_template          = 'kafka/server.properties.erb'
+    $server_systemd_override_template    = 'kafka/kafka.systemd.override.conf.erb'
     $server_default_template             = 'kafka/kafka.default.erb'
     $mirror_default_template             = 'kafka/kafka-mirror.default.erb'
+
 
 }

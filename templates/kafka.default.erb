@@ -26,7 +26,13 @@ CLASSPATH="<%= @classpath %>"
 #CLASSPATH=""
 <% end -%>
 
+<%
+# This ulimit setting here only works with SysV init scripts, not with
+# systemd on newer Debian distros.  You'll need to use a systemd override
+# file if you want to set this with systemd.
+if not @use_systemd -%>
 KAFKA_NOFILES_ULIMIT=<%= @nofiles_ulimit %>
+<% end -%>
 
 # The default JMX_PORT for Kafka Brokers is 9999.
 # Set JMX_PORT to something else to override this.

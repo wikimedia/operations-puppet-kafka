@@ -177,8 +177,9 @@ class kafka::server(
     $jvm_performance_opts                = $kafka::defaults::jvm_performance_opts,
 
     $server_properties_template          = $kafka::defaults::server_properties_template,
+    $systemd_override_template           = $kafka::defaults::server_systemd_override_template,
     $default_template                    = $kafka::defaults::server_default_template,
-    $log4j_properties_template           = $kafka::defaults::log4j_properties_template
+    $log4j_properties_template           = $kafka::defaults::log4j_properties_template,
 ) inherits kafka::defaults
 {
     # Kafka class must be included before kafka::server.
@@ -205,6 +206,33 @@ class kafka::server(
     }
     else {
         $broker_port = $kafka::defaults::default_broker_port
+    }
+
+    # Debian Jessie (and greater) has systemd, and the WMF Kafka .deb
+    # package installs a systemd service file.  It is not possible
+    # to set number open files ulimit via /etc/default/kafka wth systemd,
+    # so we need to install a custom systemd override file.
+    $use_systemd = $::lsbdistid == 'Debian' and $::lsbmajdistrelease >= 8
+    if $use_systemd {
+        file { '/etc/systemd/system/kafka.service.d':
+            ensure => 'directory',
+        }
+        file { '/etc/systemd/system/kafka.service.d/override.conf':
+            content => template($systemd_override_template),
+        }
+        # systemd needs a reload to pick up changes to this file.
+        exec { 'systemd-reload-for-kafka-override':
+            command     => '/bin/systemctl daemon-reload',
+            refreshonly => true,
+            subscribe   => File['/etc/systemd/system/kafka.service.d/override.conf'],
+        }
+        $kafka_service_systemd_require = [Exec['systemd-reload-for-kafka-override']]
+    }
+    else {
+        # Puppet hack.  Puppet flattens nested arrays.
+        # If we aren't using systemd, then we don't want
+        # the Kafka service below to require the systemd exec.
+        $kafka_service_systemd_require = []
     }
 
     # Render out Kafka Broker config files.
@@ -245,13 +273,16 @@ class kafka::server(
     }
     service { 'kafka':
         ensure     => 'running',
+        hasrestart => true,
+        hasstatus  => true,
         require    => [
             File['/etc/kafka/server.properties'],
             File['/etc/kafka/log4j.properties'],
             File['/etc/default/kafka'],
             File[$log_dirs],
-        ],
-        hasrestart => true,
-        hasstatus  => true,
+            # This will be an empty array if we
+            # aren't using systemd.
+            $kafka_service_systemd_require,
+        ]
     }
 }
