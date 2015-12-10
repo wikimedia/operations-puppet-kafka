@@ -27,10 +27,6 @@ class kafka::server::monitoring(
         require      => Class['::kafka::server::jmxtrans'],
     }
 
-    # Set up icinga monitoring of Kafka broker per second.
-    # If this drops too low, trigger an alert.
-    $nagios_servicegroup = 'analytics_eqiad'
-
     # jmxtrans statsd writer emits Kafka Broker fqdns in keys
     # by substiting '.' with '_' and suffixing the Broker port.
     $graphite_broker_key = regsubst("${::fqdn}_${jmx_port}", '\.', '_', 'G')
