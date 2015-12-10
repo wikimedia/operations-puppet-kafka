@@ -1,8 +1,7 @@
 # == Class kafka
-# Installs kafka-common package.
-# Unless you need to explicitly set the version of the Kafka package you
-# want, you probably don't need to include this class directly.
-# Including just kafka::client, kafka::server to set up a Kafka Broker, or just
+# Installs kafka-common and kafka-cli packages.
+# You might not need to include this class directly.
+# Use just kafka::server to set up a Kafka Broker, or just
 # kafka::mirror to set upa Kafka MirrorMaker service should suffice.
 #
 # == Parameters:
@@ -15,7 +14,7 @@ class kafka(
     $version = $kafka::defaults::version
 )
 {
-    package { 'kafka-common':
+    package { ['kafka-common', 'kafka-cli']:
         ensure => $version,
     }
 }

@@ -32,12 +32,13 @@ It was originally developed for 0.7.2 at https://github.com/wikimedia/puppet-kaf
 ## Kafka (Clients)
 
 ```puppet
-# Install the kafka package.
+# Install the kafka libraries and client packages.
 class { 'kafka': }
 ```
 
-This will install the Kafka package which includes /usr/sbin/kafka, useful for
-running client (console-consumer, console-producer, etc.) commands.
+This will install the kafka-common and kafka-cli which includes
+/usr/bin/kafka, useful for running client (console-consumer,
+console-producer, etc.) commands.
 
 ## Kafka Broker Server
 
@@ -54,21 +55,21 @@ class { 'kafka::server':
 }
 ```
 
-```log_dirs``` defaults to a single ```['/var/spool/kafka]```, but you may
+`log_dirs` defaults to a single `['/var/spool/kafka]`, but you may
 specify multiple Kafka log data directories here.  This is useful for spreading
 your topic partitions across multiple disks.
 
-The ```brokers``` parameter is a Hash keyed by ```$::fqdn```.  Each value is another Hash
-that contains config settings for that kafka host.  ```id``` is required and must
-be unique for each Kafka Broker Server host.  ```port``` is optional, and defaults
+The `brokers` parameter is a Hash keyed by `$::fqdn`.  Each value is another Hash
+that contains config settings for that kafka host.  `id` is required and must
+be unique for each Kafka Broker Server host.  `port` is optional, and defaults
 to 9092.
 
-Each Kafka Broker Server's ```broker_id``` and ```port``` properties in server.properties
-will be set based by looking up the node's ```$::fqdn``` in the hosts
-Hash passed into the ```kafka``` base class.
+Each Kafka Broker Server's `broker_id` and `port` properties in server.properties
+will be set based by looking up the node's `$::fqdn` in the hosts
+Hash passed into the `kafka` base class.
 
-```zookeeper_hosts``` is an array of Zookeeper host:port pairs.
-```zookeeper_chroot``` is optional, and allows you to specify a Znode under
+`zookeeper_hosts` is an array of Zookeeper host:port pairs.
+`zookeeper_chroot` is optional, and allows you to specify a Znode under
 which Kafka will store its metadata in Zookeeper.  This is useful if you
 want to use a single Zookeeper cluster to manage multiple Kafka clusters.
 See below for information on how to create this Znode in Zookeeper.
@@ -79,11 +80,12 @@ See below for information on how to create this Znode in Zookeeper.
 
 If Kafka will share a Zookeeper cluster with other users, you might want to
 create a Znode in zookeeper in which to store your Kafka cluster's data.
-You can set the ```zookeeper_chroot``` parameter on the ```kafka``` class to do this.
+You can set the `zookeeper_chroot` parameter on the `kafka` class to do this.
 
 First, you'll need to create the znode manually yourself.  You can use
-```zkCli.sh``` that ships with Zookeeper, or you can use the kafka built in
-```zookeeper-shell```:
+`zkCli.sh` that ships with Zookeeper, or you can use the kafka built in
+`zookeeper-shell`:
+
 
 ```
 $ kafka zookeeper-shell <zookeeper_host>:2182
@@ -99,7 +101,7 @@ Created /my_kafka
 ```
 
 You can use whatever chroot znode path you like.  The second argument
-(```data```) is arbitrary.  I used 'kafka' here.
+(`data`) is arbitrary.  I used 'kafka' here.
 
 Then:
 ```puppet
@@ -144,7 +146,7 @@ kafka::mirror::consumer { 'clusterB':
 
 ## jmxtrans monitoring
 
-This module contains a class called ```kafka::server::jmxtrans```.  It contains
+This module contains a class called `kafka::server::jmxtrans`.  It contains
 a useful jmxtrans JSON config object that can be used to tell jmxtrans to send
 to any output writer (Ganglia, Graphite, etc.).  To you use this, you will need
 the [puppet-jmxtrans](https://github.com/wikimedia/puppet-jmxtrans) module.
