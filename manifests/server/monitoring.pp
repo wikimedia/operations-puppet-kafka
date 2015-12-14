@@ -37,10 +37,12 @@ class kafka::server::monitoring(
     monitoring::graphite_threshold { 'kafka-broker-UnderReplicatedPartitions':
         description => 'Kafka Broker Under Replicated Partitions',
         metric      => "kafka.${graphite_broker_key}.kafka.server.ReplicaManager.UnderReplicatedPartitions.Value",
-        # UnderReplicated partitions for more than a minute
-        # or two shouldn't happen.
         warning     => '1',
         critical    => '10',
+        # Alert if any undereplicated for more than 50%
+        # of the time in the last 30 minutes.
+        from        => '30m',
+        percentage  => 50,
         require     => Class['::kafka::server::jmxtrans'],
         group       => $nagios_servicegroup,
     }
@@ -52,8 +54,13 @@ class kafka::server::monitoring(
         # As of 2014-02 replag could catch up at more than 1000 msgs / sec,
         # (probably more like 2 or 3 K / second). At that rate, 1M messages
         # behind should catch back up in at least 30 minutes.
+        # TODO: Parameterize this for different volumes?
         warning     => '1000000',
         critical    => '5000000',
+        # Alert if large replica lag for more than 50%
+        # of the time in the last 30 minutes.
+        from        => '30m',
+        percentage  => 50,
         require     => Class['::kafka::server::jmxtrans'],
         group       => $nagios_servicegroup,
     }
