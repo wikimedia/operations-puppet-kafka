@@ -22,6 +22,7 @@ class kafka::defaults {
     $zookeeper_chroot                    = undef
 
     $kafka_log_file                      = '/var/log/kafka/kafka.log'
+    $log_max_backup_index                = 4
     $producer_type                       = 'async'
     $producer_batch_num_messages         = 200
     $consumer_group_id                   = 'test-consumer-group'
