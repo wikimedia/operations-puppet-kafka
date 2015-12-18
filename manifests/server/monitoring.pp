@@ -41,7 +41,7 @@ class kafka::server::monitoring(
         critical    => '10',
         # Alert if any undereplicated for more than 50%
         # of the time in the last 30 minutes.
-        from        => '30m',
+        from        => '30min',
         percentage  => 50,
         require     => Class['::kafka::server::jmxtrans'],
         group       => $nagios_servicegroup,
@@ -59,7 +59,7 @@ class kafka::server::monitoring(
         critical    => '5000000',
         # Alert if large replica lag for more than 50%
         # of the time in the last 30 minutes.
-        from        => '30m',
+        from        => '30min',
         percentage  => 50,
         require     => Class['::kafka::server::jmxtrans'],
         group       => $nagios_servicegroup,
