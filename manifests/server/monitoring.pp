@@ -7,10 +7,14 @@
 # == Parameters
 # $jmx_port            - Default: 9999
 # $nagios_servicegroup - Nagios Service group to use for alerts.  Default: undef
+# $group_prefix        - $group_prefix passed to kafka::server::jmxtrans.
+#                        This will be used for graphite based alerts.
+#                        Default: undef
 #
 class kafka::server::monitoring(
     $jmx_port = 9999,
     $nagios_servicegroup = undef,
+    $group_prefix = undef,
 ) {
     # Generate icinga alert if Kafka Server is not running.
     nrpe::monitor_service { 'kafka':
@@ -36,7 +40,7 @@ class kafka::server::monitoring(
     # and will be removed from the ISR.
     monitoring::graphite_threshold { 'kafka-broker-UnderReplicatedPartitions':
         description => 'Kafka Broker Under Replicated Partitions',
-        metric      => "kafka.${graphite_broker_key}.kafka.server.ReplicaManager.UnderReplicatedPartitions.Value",
+        metric      => "${group_prefix}kafka.${graphite_broker_key}.kafka.server.ReplicaManager.UnderReplicatedPartitions.Value",
         warning     => '1',
         critical    => '10',
         # Alert if any undereplicated for more than 50%
@@ -50,7 +54,7 @@ class kafka::server::monitoring(
     # Alert if any Kafka Broker replica lag is too high
     monitoring::graphite_threshold { 'kafka-broker-Replica-MaxLag':
         description => 'Kafka Broker Replica Max Lag',
-        metric      => "kafka.${graphite_broker_key}.kafka.server.ReplicaFetcherManager.MaxLag.Value",
+        metric      => "${group_prefix}kafka.${graphite_broker_key}.kafka.server.ReplicaFetcherManager.MaxLag.Value",
         # As of 2014-02 replag could catch up at more than 1000 msgs / sec,
         # (probably more like 2 or 3 K / second). At that rate, 1M messages
         # behind should catch back up in at least 30 minutes.
