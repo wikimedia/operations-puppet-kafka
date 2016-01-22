@@ -1,0 +1,50 @@
+# Note: This file is managed by Puppet.
+
+#
+# see kafka.producer.ProducerConfig for more details
+#
+
+############################# Producer Basics #############################
+
+
+# list of brokers used for bootstrapping
+# format: host1:port1,host2:port2 ...
+metadata.broker.list=<%= Array(@destination_brokers).join(',') %>
+
+# Logically identifies the application making the request.
+client.id=kafka-mirror-<%= @mirror_name %>
+
+# specifies whether the messages are sent asynchronously (async) or synchronously (sync)
+producer.type=<%= @producer_type %>
+
+# Required number of acks
+request.required.acks=<%= @request_required_acks %>
+
+# specify the compression codec for all data generated: none , gzip, snappy.
+# the old config values work as well: 0, 1, 2 for none, gzip, snappy, respectivally
+compression.codec=<%= compression_codec %>
+
+<% if @producer_type == 'async' -%>
+############################# Async Producer #############################
+
+# Number of messages batched at the producer.  Messages are grouped together
+# and produced to partitions in batches of this number.
+batch.num.messages=<%= @batch_num_messages %>
+
+# Maximum time, in milliseconds, for buffering data on the producer queue
+queue.buffering.max.ms=<%= @queue_buffering_max_ms %>
+
+# Maximum size of the blocking queue for buffering on the producer
+# This is the size of the producer's queue.  If this fills up
+# and queue.enqueue.timeout.ms is positive, messages in this queue
+# will be dropped.  If queue.enqueue.timeout.ms is negative,
+# the producer will block until the queue is reduced.
+queue.buffering.max.messages=<%= @queue_buffering_max_messages %>
+
+# Timeout for event enqueue:
+# 0: events will be enqueued immediately or dropped if the queue is full
+# -ve: enqueue will block indefinitely if the queue is full
+# +ve: enqueue will block up to this many milliseconds if the queue is full
+queue.enqueue.timeout.ms=<%= @queue_enqueue_timeout_ms %>
+
+<% end -%>

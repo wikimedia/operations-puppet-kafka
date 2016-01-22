@@ -1,24 +1,17 @@
 # == Define kafka::mirror::consumer
-# Kafka MirrorMaker takes multiple consumer.property files.
-# Each one of these property files defines a Zookeeper URL
-# (hosts/chroot) from which information about a Kafka Broker
-# cluster may be read.  This is a define so that nay number
-# of source Kafka clusters may be configured.
+# kafka::mirror::consumers are grouped together by $mirror_name.
+# $mirror_name should match the title of the kafka::mirror instance
+# you want this consumer to be associated with.
 #
 # == Usage:
 #   kafka::mirror::consumer { 'clusterA':
-#       $zookeeper_hosts  => ['zk1.example.com', 'zk2.example.com', 'zk3.example.com'],
-#       $zookeeper_chroot => '/kafka/clusterA',
+#       mirror_name   => 'aggregate',
+#       zookeeper_url => 'zk:2181/kafka/clusterA',
 #   }
 #
 # == Parameters:
-# $zookeeper_hosts                  - Array of zookeeper hostname/IP(:port)s.
-#
-# $zookeeper_chroot                 - Znode Path in zookeeper in which to keep Kafka data.
-#                                     Default: undef (the root znode).  Note that if you set
-#                                     this paramater, the Znode will not be created for you.
-#                                     You must do so manually yourself.  See the README
-#                                     for instructions on how to do so.
+# $zookeeper_url                    - URL to Kafka in zookeeper, including
+#                                     chroot.
 #
 # $zookeeper_connection_timeout_ms  - Timeout in ms for connecting to zookeeper.
 #                                     Default: 6000
@@ -26,17 +19,24 @@
 # $zookeeper_session_timeout_ms     - Timeout in ms for session to zookeeper.
 #                                     Default: 6000
 #
-# $consumer_group_id                - Consumer ID.  This will be used to save the
-#                                     consumed high water mark for this consumer
-#                                     in Zookeeper.
+# $auto_commit_enable               - If true, periodically commit to zookeeper
+#                                     the offset of messages already fetched by
+#                                     the consumer. Default: true
+# $auto_commit_interval_ms          - The frequency in ms that the consumer
+#                                     offsets are committed to zookeeper.
+#                                     Default: 6000
+# $auto_offset_reset                - smallest, largest, or throw exception.
+#                                     Default: largest
 #
 define kafka::mirror::consumer(
-    $zookeeper_hosts,
-    $zookeeper_chroot                   = undef,
+    $mirror_name,
+    $zookeeper_url,
     $zookeeper_connection_timeout_ms    = 6000,
     $zookeeper_session_timeout_ms       = 6000,
-    $consumer_group_id                  = "mirror${zookeeper_chroot}",
-    $consumer_properties_template       = 'kafka/consumer.properties.erb'
+    $auto_commit_enable                 = true,
+    $auto_commit_interval_ms            = 6000,
+    $auto_offset_reset                  = 'largest',
+    $consumer_properties_template       = 'kafka/mirror/consumer.properties.erb'
 )
 {
     # Kafka class must be included before kafka::mirror::consumer.
@@ -48,8 +48,9 @@ define kafka::mirror::consumer(
     # you want installed.
     require ::kafka
 
-    file { "/etc/kafka/mirror/consumer.${name}.properties":
+    @file { "/etc/kafka/mirror/${$mirror_name}/consumer.${title}.properties":
         content => template($consumer_properties_template),
-        before  => Service['kafka-mirror'],
+        tag     => ["kafka-mirror-${mirror_name}-consumer"],
+        before  => Service["kafka-mirror-${mirror_name}"]
     }
 }

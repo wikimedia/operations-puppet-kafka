@@ -23,9 +23,6 @@ class kafka::defaults {
 
     $kafka_log_file                      = '/var/log/kafka/kafka.log'
     $log_max_backup_index                = 4
-    $producer_type                       = 'async'
-    $producer_batch_num_messages         = 200
-    $consumer_group_id                   = 'test-consumer-group'
 
     # Broker Server settings
     $java_home                           = undef
@@ -70,24 +67,12 @@ class kafka::defaults {
     # Kafka package version.
     $version                             = 'installed'
 
-    # MirrorMaker settings
-    $topic_whitelist                     = '.*'
-    $topic_blacklist                     = undef
-    $num_streams                         = 1
-    $num_producers                       = 1
-    $queue_size                          = 10000
-
     # Default puppet paths to template config files.
     # This allows us to use custom template config files
     # if we want to override more settings than this
     # module yet supports.
-    $producer_properties_template        = 'kafka/producer.properties.erb'
-    $consumer_properties_template        = 'kafka/consumer.properties.erb'
     $log4j_properties_template           = 'kafka/log4j.properties.erb'
     $server_properties_template          = 'kafka/server.properties.erb'
     $server_systemd_override_template    = 'kafka/kafka.systemd.override.conf.erb'
     $server_default_template             = 'kafka/kafka.default.erb'
-    $mirror_default_template             = 'kafka/kafka-mirror.default.erb'
-
-
 }

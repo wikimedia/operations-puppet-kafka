@@ -12,9 +12,9 @@
 #                        Default: undef
 #
 class kafka::server::monitoring(
-    $jmx_port = 9999,
+    $jmx_port            = 9999,
     $nagios_servicegroup = undef,
-    $group_prefix = undef,
+    $group_prefix        = undef,
 ) {
     # Generate icinga alert if Kafka Server is not running.
     nrpe::monitor_service { 'kafka':
@@ -24,15 +24,17 @@ class kafka::server::monitoring(
         critical     => true,
     }
 
-    # Generate icinga alert if this jmxtrans instance is not running.
-    nrpe::monitor_service { 'jmxtrans':
-        description  => 'jmxtrans',
-        nrpe_command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -C java --ereg-argument-array "-jar.+jmxtrans-all.jar"',
-        require      => Class['::kafka::server::jmxtrans'],
+    if !defined(Nrpe::Monitor_service['jmxtrans']) {
+        # Generate icinga alert if this jmxtrans instance is not running.
+        nrpe::monitor_service { 'jmxtrans':
+            description  => 'jmxtrans',
+            nrpe_command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -C java --ereg-argument-array "-jar.+jmxtrans-all.jar"',
+            require      => Service['jmxtrans'],
+        }
     }
 
-    # jmxtrans statsd writer emits Kafka Broker fqdns in keys
-    # by substiting '.' with '_' and suffixing the Broker port.
+    # jmxtrans statsd writer emits fqdns in keys
+    # by substiting '.' with '_' and suffixing the jmx port.
     $graphite_broker_key = regsubst("${::fqdn}_${jmx_port}", '\.', '_', 'G')
 
     # Alert if any Kafka has under replicated partitions.

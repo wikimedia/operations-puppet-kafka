@@ -13,6 +13,7 @@
 # $objects       - objects parameter to pass to jmxtrans::metrics.  Only use
 #                  this if you need to override the default ones that this
 #                  class provides.
+# group_prefix   - If set, this will be prefixed to all metrics.  Default: undef
 # $run_interval  - How often jmxtrans should run.        Default: 15
 # $log_level     - level at which jmxtrans should log.   Default: info
 # $legacy_jmx    - JMX Bean names changed in 0.8.2.  If this is true

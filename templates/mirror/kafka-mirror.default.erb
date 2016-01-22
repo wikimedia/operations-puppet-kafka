@@ -6,9 +6,8 @@ KAFKA_MIRROR_START=yes
 # User and group to run as
 KAFKA_USER=kafka
 KAFKA_GROUP=kafka
-KAFKA_CONFIG=/etc/kafka
 
-# The default JMX_PORT for Kafka MirrorMaker is 9993.
+# The default JMX_PORT for Kafka MirrorMaker is 9998.
 # Set JMX_PORT to something else to override this.
 JMX_PORT=<%= @jmx_port %>
 <% if @jmx_opts -%>
@@ -25,24 +24,5 @@ KAFKA_HEAP_OPTS=<%= @heap_opts %>
 #KAFKA_HEAP_OPTS="-Xmx1G -Xms1G"
 <% end -%>
 #KAFKA_JVM_PERFORMANCE_OPTS="-server -XX:+UseCompressedOops -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:+CMSScavengeBeforeRemark -XX:+DisableExplicitGC"
-#KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:${KAFKA_CONFIG}/log4j.properties"
+KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:/etc/kafka/mirror/<%= @mirror_name %>/log4j.properties"
 #KAFKA_OPTS=""
-
-#
-# MirrorMaker options:
-#
-
-# Set this to a space separated list of consumer.properties files.
-# By default, /etc/init.d/kafka-mirror will use any files that match
-# /etc/kafka/mirror/consumer.*
-#KAFKA_MIRROR_CONSUMER_CONFIGS=
-
-#KAFKA_MIRROR_PRODUCER_CONFIG=/etc/kafka/mirror/producer.properties
-
-# Only set one of the following.
-#KAFKA_MIRROR_WHITELIST='.*'
-#KAFKA_MIRROR_BLACKLIST=''
-
-#KAFKA_MIRROR_NUM_STREAMS=1
-#KAFKA_MIRROR_NUM_PRODUCERS=1
-#KAFKA_MIRROR_QUEUE_SIZE=10000

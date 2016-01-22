@@ -72,82 +72,36 @@ Hash passed into the `kafka` base class.
 `zookeeper_chroot` is optional, and allows you to specify a Znode under
 which Kafka will store its metadata in Zookeeper.  This is useful if you
 want to use a single Zookeeper cluster to manage multiple Kafka clusters.
-See below for information on how to create this Znode in Zookeeper.
 
-
-
-## Custom Zookeeper Chroot
-
-If Kafka will share a Zookeeper cluster with other users, you might want to
-create a Znode in zookeeper in which to store your Kafka cluster's data.
-You can set the `zookeeper_chroot` parameter on the `kafka` class to do this.
-
-First, you'll need to create the znode manually yourself.  You can use
-`zkCli.sh` that ships with Zookeeper, or you can use the kafka built in
-`zookeeper-shell`:
-
-
-```
-$ kafka zookeeper-shell <zookeeper_host>:2182
-Connecting to kraken-zookeeper
-Welcome to ZooKeeper!
-JLine support is enabled
-
-WATCHER::
-
-WatchedEvent state:SyncConnected type:None path:null
-[zk: kraken-zookeeper(CONNECTED) 0] create /my_kafka kafka
-Created /my_kafka
-```
-
-You can use whatever chroot znode path you like.  The second argument
-(`data`) is arbitrary.  I used 'kafka' here.
-
-Then:
-```puppet
-class { 'kafka::server':
-    brokers => {
-        'kafka-node01.example.com' => { 'id' => 1, 'port' => 12345 },
-        'kafka-node02.example.com' => { 'id' => 2 },
-    },
-    zookeeper_hosts => ['zk-node01:2181', 'zk-node02:2181', 'zk-node03:2181'],
-    # set zookeeper_chroot on the kafka class.
-    zookeeper_chroot => '/kafka/clusterA',
-}
-```
 
 ## Kafka Mirror
 
-Kafka MirrorMaker is usually used for inter data center Kafka cluster replication
-and aggregation.  You can consume from any number of source Kafka clusters, and
-produce to a single destination Kafka cluster.
+Kafka MirrorMaker will allow you to mirror data from multiple Kafka clusters
+into another.  This is useful for cross DC replication and for aggregation.
 
 ```puppet
-# Configure kafka-mirror to produce to Kafka Brokers which are
-# part of our kafka aggregator cluster.
-class { 'kafka::mirror':
-    destination_brokers => {
-        'kafka-aggregator01.example.com' => { 'id' => 11 },
-        'kafka-aggregator02.example.com' => { 'id' => 12 },
-    },
-    topic_whitelist => 'webrequest.*',
+# Mirror the 'main' and 'secondary' Kafka clusters
+# to the 'aggregate' Kafka cluster.
+kafka::mirror::consumer { 'main':
+    mirror_name   => 'aggregate',
+    zookeeper_url => 'zk:2181/kafka/main',
 }
-
-# Configure kafka-mirror to consume from both clusterA and clusterB
-kafka::mirror::consumer { 'clusterA':
-    zookeeper_hosts  => ['zk-node01:2181', 'zk-node02:2181', 'zk-node03:2181'],
-    zookeeper_chroot => ['/kafka/clusterA'],
+kafka::mirror::consumer { 'secondary':
+    mirror_name   => 'aggregate',
+    zookeeper_url => 'zk:2181/kafka/secondary',
 }
-kafka::mirror::consumer { 'clusterB':
-    zookeeper_hosts  => ['zk-node01:2181', 'zk-node02:2181', 'zk-node03:2181'],
-    zookeeper_chroot => ['/kafka/clusterB'],
+kafka::mirror { 'aggregate':
+    destination_brokers => ['ka01:9092','ka02:9092'],
+    whitelist           => 'these_topics_only.*',
 }
 ```
+Note that the kafka-mirror service does not subscribe to its config files.  If
+you make changes, you will have to restart the service manually.
 
 ## jmxtrans monitoring
 
-This module contains a class called `kafka::server::jmxtrans`.  It contains
-a useful jmxtrans JSON config object that can be used to tell jmxtrans to send
+`kafka::server::jmxtrans` and `kafka::mirror::jmxtrans`  configure
+useful jmxtrans JSON config objects that can be used to tell jmxtrans to send
 to any output writer (Ganglia, Graphite, etc.).  To you use this, you will need
 the [puppet-jmxtrans](https://github.com/wikimedia/puppet-jmxtrans) module.
 
@@ -157,8 +111,17 @@ class { '::kafka::server::jmxtrans':
     ganglia => 'ganglia.example.com:8649',
 }
 ```
-
-This will install jmxtrans and start render JSON config files for sending
+This will install jmxtrans and render JSON config files for sending
 JVM and Kafka Broker stats to Ganglia.
 See [kafka-jmxtrans.json.md](kafka-jmxtrans.json.md) for a fully
-rendered jmxtrans Kafka JSON config file.
+rendered jmxtrans Kafka Broker JSON config file.
+
+```
+# Declare this define on hosts where you run Kafka MirrorMaker.
+kafka::mirror::jmxtrans { 'aggregate':
+    statsd => 'statsd.example.org:8125'
+}
+
+```
+This will install jmxtrans and render JSON config files for sending JVM and
+Kafka MirrorMaker (consumers and producer) stats to statsd.
