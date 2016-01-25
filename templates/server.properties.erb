@@ -137,6 +137,12 @@ log.cleanup.interval.mins=<%= @log_cleanup_interval_mins %>
 
 log.cleanup.policy=<%= @log_cleanup_policy %>
 
+# Log retention window in minutes for offsets topic.  If an offset
+# commit for a consumer group has not been recieved in this amount of
+# time, Kafka will drop the offset commit and consumers in the group
+# will have to start a new.  This can be overridden in an offset commit
+# request.
+offsets.retention.minutes=<%= @offsets_retention_minutes %>
 
 ############################# Zookeeper #############################
 

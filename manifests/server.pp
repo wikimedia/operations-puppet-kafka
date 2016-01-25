@@ -115,6 +115,9 @@
 # $log_cleanup_policy                   - The default policy for handling log tails.
 #                                         Can be either delete or dedupe.  Default: delete
 #
+# $offsets_retention_minutes            - Default number of minutes before Kafka
+#                                         expires an offset commit for a
+#                                         consumer group.  Default 1 week
 # $metrics_properties                   - Config hash of Kafka metrics property key => value pairs.
 #                                         Use this for configuring your own metrics reporter classes.
 #                                         Default: undef
@@ -172,6 +175,8 @@ class kafka::server(
 
     $log_cleanup_interval_mins           = $kafka::defaults::log_cleanup_interval_mins,
     $log_cleanup_policy                  = $kafka::defaults::log_cleanup_policy,
+
+    $offsets_retention_minutes           = $kafka::defaults::offsets_retention_minutes,
 
     $metrics_properties                  = $kafka::defaults::metrics_properties,
     $kafka_log_file                      = $kafka::defaults::kafka_log_file,

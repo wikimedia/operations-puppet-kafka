@@ -62,6 +62,7 @@ class kafka::defaults {
     $log_cleanup_policy                  = 'delete'
     $log_cleanup_interval_mins           = 1
 
+    $offsets_retention_minutes           = 10080   # 1 week
     $metrics_properties                  = undef
 
     $jvm_performance_opts                = undef
