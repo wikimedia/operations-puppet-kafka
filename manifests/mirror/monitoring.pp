@@ -8,13 +8,11 @@
 # $title               - Should be the same as the kafka::mirror instance
 #                        you want.
 #                        to monitor.
-# $nagios_servicegroup - Nagios Service group to use for alerts.  Default: undef
 # $group_prefix        - $group_prefix passed to kafka::mirror::jmxtrans.
 #                        This will be used for graphite based alerts.
 #                        Default: undef
 #
 define kafka::mirror::monitoring(
-    $nagios_servicegroup = undef,
     $group_prefix        = undef,
 ) {
     # Generate icinga alert if Kafka Server is not running.
@@ -22,7 +20,6 @@ define kafka::mirror::monitoring(
         description   => "Kafka MirrorMaker ${title}",
         nrpe_command  => "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java  --ereg-argument-array 'kafka.tools.MirrorMaker.+/etc/kafka/mirror/${title}/producer\.properties'",
         require       => Kafka::Mirror[$title],
-        contact_group => $nagios_servicegroup,
     }
 
     if !defined(Nrpe::Monitor_service['jmxtrans']) {
@@ -31,7 +28,6 @@ define kafka::mirror::monitoring(
             description  => 'jmxtrans',
             nrpe_command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -C java --ereg-argument-array "-jar.+jmxtrans-all.jar"',
             require      => Service['jmxtrans'],
-            contact_group => $nagios_servicegroup,
         }
     }
 }
