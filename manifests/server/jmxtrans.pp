@@ -449,7 +449,7 @@ class kafka::server::jmxtrans(
         }
     }
 
-    # query kafka for jmx metrics
+    # Query kafka for jmx metrics.
     jmxtrans::metrics { "kafka-${::hostname}-${jmx_port}":
         jmx                  => $jmx,
         outfile              => $outfile,
