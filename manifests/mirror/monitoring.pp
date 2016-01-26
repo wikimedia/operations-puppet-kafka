@@ -21,7 +21,7 @@ define kafka::mirror::monitoring(
     nrpe::monitor_service { "kafka-mirror-${title}":
         description   => "Kafka MirrorMaker ${title}",
         nrpe_command  => "/usr/lib/nagios/plugins/check_procs -c 1:1 -C java  --ereg-argument-array 'kafka.tools.MirrorMaker.+/etc/kafka/mirror/${title}/producer\.properties'",
-        require       => Class['::kafka::server'],
+        require       => Kafka::Mirror[$title],
         contact_group => $nagios_servicegroup,
     }
 
