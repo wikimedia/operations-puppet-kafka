@@ -279,7 +279,7 @@ class kafka::server(
         default => 'running',
     }
     service { 'kafka':
-        ensure     => 'running',
+        ensure     => $kafka_ensure,
         hasrestart => true,
         hasstatus  => true,
         require    => [
