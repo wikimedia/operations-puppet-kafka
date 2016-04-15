@@ -69,6 +69,10 @@ class kafka::server::monitoring(
         percentage  => 50,
         require     => Class['::kafka::server::jmxtrans'],
         group       => $nagios_servicegroup,
+        # This check is too noisy because of
+        # https://phabricator.wikimedia.org/T121407.
+        # TODO: Re-enable after 0.9 upgrade.
+        ensure      => 'absent',
     }
 
     # monitor disk statistics
