@@ -43,11 +43,11 @@ define kafka::mirror::jmxtrans(
 
     # query for metrics from Kafka's JVM
     jmxtrans::metrics::jvm { $jmx:
-        ganglia              => $ganglia,
-        graphite             => $graphite,
-        statsd               => $statsd,
-        outfile              => $outfile,
-        group_prefix         => $group_prefix,
+        ganglia      => $ganglia,
+        graphite     => $graphite,
+        statsd       => $statsd,
+        outfile      => $outfile,
+        group_prefix => $group_prefix,
     }
 
     # DRY up some often used JMX attributes.
@@ -105,7 +105,7 @@ define kafka::mirror::jmxtrans(
             # ConsumerFetcheManager (MaxLag, MinFetchRate)
             {
                 'name'          => "kafka.consumer:type=ConsumerFetcherManager,name=*,clientId=${client_id}",
-                'resultAlias'   => "kafka.consumer.ConsumerFetcherManager",
+                'resultAlias'   => 'kafka.consumer.ConsumerFetcherManager',
                 'typeNames'     => ['name'],
                 'attrs'         => $kafka_value_jmx_attrs,
             },
