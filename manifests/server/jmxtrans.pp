@@ -46,11 +46,11 @@ class kafka::server::jmxtrans(
 
     # query for metrics from Kafka's JVM
     jmxtrans::metrics::jvm { $jmx:
-        ganglia              => $ganglia,
-        graphite             => $graphite,
-        statsd               => $statsd,
-        outfile              => $outfile,
-        group_prefix         => $group_prefix,
+        ganglia      => $ganglia,
+        graphite     => $graphite,
+        statsd       => $statsd,
+        outfile      => $outfile,
+        group_prefix => $group_prefix,
     }
 
     # DRY up some often used JMX attributes.

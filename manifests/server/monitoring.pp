@@ -55,6 +55,10 @@ class kafka::server::monitoring(
 
     # Alert if any Kafka Broker replica lag is too high
     monitoring::graphite_threshold { 'kafka-broker-Replica-MaxLag':
+        # This check is too noisy because of
+        # https://phabricator.wikimedia.org/T121407.
+        # TODO: Re-enable after 0.9 upgrade.
+        ensure      => 'absent',
         description => 'Kafka Broker Replica Max Lag',
         metric      => "${group_prefix}kafka.${graphite_broker_key}.kafka.server.ReplicaFetcherManager.MaxLag.Value",
         # As of 2014-02 replag could catch up at more than 1000 msgs / sec,
@@ -69,10 +73,6 @@ class kafka::server::monitoring(
         percentage  => 50,
         require     => Class['::kafka::server::jmxtrans'],
         group       => $nagios_servicegroup,
-        # This check is too noisy because of
-        # https://phabricator.wikimedia.org/T121407.
-        # TODO: Re-enable after 0.9 upgrade.
-        ensure      => 'absent',
     }
 
     # monitor disk statistics
