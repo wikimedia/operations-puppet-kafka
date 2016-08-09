@@ -76,6 +76,7 @@ class kafka::server::monitoring(
     }
 
     # monitor disk statistics
+    include ::standard
     if $::standard::has_ganglia {
         ganglia::plugin::python { 'diskstat': }
     }
